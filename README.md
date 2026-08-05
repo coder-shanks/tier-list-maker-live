@@ -5,10 +5,11 @@ This project is a live tier list maker built with React, TypeScript, and Vite. I
 # TODOs
 
 - [x] Setup react + vite
-- [ ] Add tailwind
-- [ ] Add shadcn
-- [ ] Explore dnd libraries - pick one
-- [ ] Add zustand
+- [x] Add tailwind
+- [x] Add shadcn
+- [x] Explore dnd libraries - pick one -> dnd-kit
+- [ ] Add zustand as state manager
+- [ ] Make it customizable
 
 # Working Demo
 
