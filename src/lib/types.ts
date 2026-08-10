@@ -1,12 +1,50 @@
-type Tier = {
+export type Tier = {
   id: string
   title: string
-  bgColor: string
+  color: string
+  textColor?: string
 }
 
-type DragItem = {
-  id: number
-  content: string
+export type TierItem = {
+  id: string
+  title: string
+  imageUrl?: string
+  category?: string
+  subtitle?: string
+  color?: string
 }
 
-export type { Tier, DragItem } 
+export type TierListContainers = Record<string, string[]>
+
+export type ItemSize = 'compact' | 'normal' | 'large'
+
+export type ColorPreset = {
+  id: string
+  name: string
+  bg: string
+  text: string
+  border?: string
+}
+
+export type TemplateData = {
+  id: string
+  name: string
+  description: string
+  icon: string
+  category: string
+  title: string
+  subtitle: string
+  author: string
+  tiers: Tier[]
+  items: TierItem[]
+  containers: TierListContainers
+}
+
+export type TierListHistoryState = {
+  title: string
+  subtitle: string
+  author: string
+  tiers: Tier[]
+  items: TierItem[]
+  containers: TierListContainers
+}
