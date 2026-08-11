@@ -46,16 +46,16 @@ export default function TierRow({
 
   return (
     <div
-      className={`group/tier flex flex-col md:flex-row min-h-[90px] border-b border-zinc-200 dark:border-zinc-800/80 last:border-b-0 transition-all duration-200 ${
+      className={`group/tier flex flex-col md:flex-row min-h-[84px] sm:min-h-[96px] border-b border-border last:border-b-0 transition-all duration-150 ${
         isDropTarget
-          ? 'bg-indigo-50/80 dark:bg-indigo-950/30'
-          : 'bg-white/60 dark:bg-zinc-950/40 hover:bg-zinc-50/80 dark:hover:bg-zinc-900/30'
+          ? 'bg-accent/40'
+          : 'bg-card/40 hover:bg-card/70'
       }`}
     >
-      {/* Left Column: Tier Label Header with Popover Trigger */}
+      {/* Left Column: Iconic Grade Header with Popover Trigger */}
       <div
         style={{ backgroundColor: tier.color }}
-        className="w-full md:w-48 lg:w-56 shrink-0 min-h-[70px] md:min-h-[90px] p-3 flex items-center justify-between shadow-inner relative transition-colors select-none"
+        className="w-full md:w-44 lg:w-52 shrink-0 min-h-[64px] md:min-h-[96px] p-3 flex items-center justify-between shadow-inner relative transition-colors select-none"
       >
         <TierSettingsPopover
           tier={tier}
@@ -65,13 +65,13 @@ export default function TierRow({
         >
           <button
             type="button"
-            className="flex-1 min-w-0 pr-2 text-left group/title focus:outline-hidden"
+            className="flex-1 min-w-0 pr-2 text-left group/title focus:outline-hidden cursor-pointer"
             title="Click to edit tier name & color"
           >
             <div className="flex items-center gap-1.5">
               <h3
                 style={{ color: tier.textColor || '#ffffff' }}
-                className="font-black text-base md:text-lg tracking-tight line-clamp-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
+                className="tier-grade-text font-black text-lg md:text-xl tracking-tight line-clamp-2"
               >
                 {tier.title}
               </h3>
@@ -80,14 +80,14 @@ export default function TierRow({
                   className="opacity-0 group-hover/title:opacity-90 transition-opacity shrink-0"
                   style={{ color: tier.textColor || '#ffffff' }}
                 >
-                  <HugeiconsIcon icon={Edit02Icon} size={14} />
+                  <HugeiconsIcon icon={Edit02Icon} size={13} />
                 </span>
               )}
             </div>
 
-            {/* Item count badge */}
-            <div className="mt-1 flex items-center gap-1.5">
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/30 backdrop-blur-xs text-white/90 border border-white/15 inline-flex items-center gap-1">
+            {/* Item count chip */}
+            <div className="mt-0.5 flex items-center gap-1">
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-black/25 backdrop-blur-xs text-white/90 border border-white/10 inline-flex items-center gap-1">
                 <span>{tierItems.length}</span>
                 <span className="opacity-75">{tierItems.length === 1 ? 'item' : 'items'}</span>
               </span>
@@ -95,7 +95,7 @@ export default function TierRow({
           </button>
         </TierSettingsPopover>
 
-        {/* Tier Color / Settings Indicator */}
+        {/* Tier Settings Color Icon Trigger */}
         {!previewMode && (
           <TierSettingsPopover
             tier={tier}
@@ -106,35 +106,35 @@ export default function TierRow({
             <button
               type="button"
               className="p-1.5 rounded-lg bg-black/20 hover:bg-black/40 text-white/90 hover:text-white transition-all backdrop-blur-xs flex items-center justify-center border border-white/10 hover:border-white/30 active:scale-90"
-              title="Tier Settings"
+              title="Tier Color & Name Settings"
             >
-              <HugeiconsIcon icon={ColorsIcon} size={16} />
+              <HugeiconsIcon icon={ColorsIcon} size={15} />
             </button>
           </TierSettingsPopover>
         )}
       </div>
 
-      {/* Center / Right: Droppable Tier Drop Zone */}
+      {/* Center Droppable Tier Drop Zone */}
       <div
         ref={ref}
         style={{
-          boxShadow: isDropTarget ? `inset 0 0 0 2px ${tier.color}, inset 0 0 20px ${tier.color}25` : undefined,
+          boxShadow: isDropTarget ? `inset 0 0 0 2px ${tier.color}, inset 0 0 24px ${tier.color}15` : undefined,
         }}
-        className={`flex-1 p-2.5 sm:p-3 min-h-[90px] flex flex-wrap gap-2.5 items-center content-center transition-all duration-200 ${
+        className={`flex-1 p-2 sm:p-3 min-h-[84px] sm:min-h-[96px] flex flex-wrap gap-2 sm:gap-2.5 items-center content-center transition-all duration-150 ${
           isDropTarget
-            ? 'bg-zinc-100/90 dark:bg-zinc-900/90 scale-[0.998]'
-            : 'bg-zinc-50/50 dark:bg-zinc-900/60'
+            ? 'bg-secondary/70 scale-[0.999]'
+            : 'bg-background/40'
         }`}
       >
         {tierItems.length === 0 ? (
           <div
-            className={`w-full h-full min-h-[60px] flex items-center justify-center border-2 border-dashed rounded-xl p-2 text-xs font-medium select-none pointer-events-none transition-all duration-200 ${
+            className={`w-full h-full min-h-[56px] flex items-center justify-center border border-dashed rounded-lg p-2 text-xs font-mono font-medium select-none pointer-events-none transition-all duration-150 ${
               isDropTarget
-                ? 'border-indigo-400 text-indigo-500 bg-indigo-500/10 font-bold scale-[1.01]'
-                : 'border-zinc-300 dark:border-zinc-800/80 text-zinc-400 dark:text-zinc-600 group-hover/tier:border-zinc-400 dark:group-hover/tier:border-zinc-700/60'
+                ? 'border-rose-500 text-rose-500 bg-rose-500/10 font-bold'
+                : 'border-border/70 text-muted-foreground/60 group-hover/tier:text-muted-foreground'
             }`}
           >
-            {isDropTarget ? `Release to rank in ${tier.title} 🎯` : `Drop items here to rank in ${tier.title}`}
+            {isDropTarget ? `Drop into ${tier.title}` : `Drop items here`}
           </div>
         ) : (
           tierItems.map((item) => (
@@ -147,17 +147,17 @@ export default function TierRow({
         )}
       </div>
 
-      {/* Right Controls Sidebar: Tier Row Actions (hidden in Preview Mode) */}
+      {/* Right Action Rail (Desktop only, hidden in preview) */}
       {!previewMode && (
-        <div className="hidden md:flex flex-col justify-center items-center gap-0.5 p-1.5 bg-zinc-100/90 dark:bg-zinc-950/80 border-l border-zinc-200 dark:border-zinc-800/80 shrink-0 w-11 opacity-60 group-hover/tier:opacity-100 transition-opacity">
+        <div className="hidden md:flex flex-col justify-center items-center gap-0.5 p-1 bg-secondary/50 border-l border-border shrink-0 w-10 opacity-40 group-hover/tier:opacity-100 transition-opacity">
           <SimpleTooltip content="Move Tier Up" side="left">
             <button
               type="button"
               disabled={isFirst}
               onClick={() => moveTier(tier.id, 'up')}
-              className="p-1 rounded-md text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-800 disabled:opacity-20 disabled:hover:bg-transparent active:scale-90 transition-all"
+              className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-background disabled:opacity-20 disabled:hover:bg-transparent active:scale-90 transition-all"
             >
-              <HugeiconsIcon icon={ArrowUp01Icon} size={16} />
+              <HugeiconsIcon icon={ArrowUp01Icon} size={15} />
             </button>
           </SimpleTooltip>
 
@@ -166,20 +166,20 @@ export default function TierRow({
               type="button"
               disabled={isLast}
               onClick={() => moveTier(tier.id, 'down')}
-              className="p-1 rounded-md text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-800 disabled:opacity-20 disabled:hover:bg-transparent active:scale-90 transition-all"
+              className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-background disabled:opacity-20 disabled:hover:bg-transparent active:scale-90 transition-all"
             >
-              <HugeiconsIcon icon={ArrowDown01Icon} size={16} />
+              <HugeiconsIcon icon={ArrowDown01Icon} size={15} />
             </button>
           </SimpleTooltip>
 
-          <SimpleTooltip content="Clear all items in this tier" side="left">
+          <SimpleTooltip content="Return items to pool" side="left">
             <button
               type="button"
               onClick={() => clearTier(tier.id)}
               disabled={tierItems.length === 0}
-              className="p-1 rounded-md text-amber-500 dark:text-amber-400 hover:text-amber-600 dark:hover:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 disabled:opacity-20 disabled:hover:bg-transparent active:scale-90 transition-all"
+              className="p-1 rounded text-amber-500 hover:text-amber-600 hover:bg-amber-500/10 disabled:opacity-20 disabled:hover:bg-transparent active:scale-90 transition-all"
             >
-              <HugeiconsIcon icon={RotateLeft01Icon} size={14} />
+              <HugeiconsIcon icon={RotateLeft01Icon} size={13} />
             </button>
           </SimpleTooltip>
 
@@ -187,9 +187,9 @@ export default function TierRow({
             <button
               type="button"
               onClick={() => deleteTier(tier.id)}
-              className="p-1 rounded-md text-rose-500 dark:text-rose-400 hover:text-rose-600 dark:hover:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 active:scale-90 transition-all"
+              className="p-1 rounded text-rose-500 hover:text-rose-600 hover:bg-rose-500/10 active:scale-90 transition-all"
             >
-              <HugeiconsIcon icon={Delete02Icon} size={14} />
+              <HugeiconsIcon icon={Delete02Icon} size={13} />
             </button>
           </SimpleTooltip>
         </div>

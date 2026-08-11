@@ -1,31 +1,31 @@
 import type { ColorPreset, TemplateData, Tier } from './types'
 
 export const COLOR_PRESETS: ColorPreset[] = [
-  { id: 'red', name: 'Ruby Red', bg: '#ef4444', text: '#ffffff', border: '#dc2626' },
-  { id: 'rose', name: 'Rose Pink', bg: '#f43f5e', text: '#ffffff', border: '#e11d48' },
-  { id: 'orange', name: 'Amber Orange', bg: '#f97316', text: '#ffffff', border: '#ea580c' },
-  { id: 'amber', name: 'Warm Amber', bg: '#f59e0b', text: '#000000', border: '#d97706' },
-  { id: 'yellow', name: 'Bright Gold', bg: '#eab308', text: '#000000', border: '#ca8a04' },
-  { id: 'lime', name: 'Neon Lime', bg: '#84cc16', text: '#000000', border: '#65a30d' },
-  { id: 'green', name: 'Emerald Green', bg: '#10b981', text: '#ffffff', border: '#059669' },
-  { id: 'teal', name: 'Cyan Teal', bg: '#14b8a6', text: '#ffffff', border: '#0d9488' },
-  { id: 'cyan', name: 'Sky Cyan', bg: '#06b6d4', text: '#ffffff', border: '#0891b2' },
-  { id: 'blue', name: 'Electric Blue', bg: '#3b82f6', text: '#ffffff', border: '#2563eb' },
-  { id: 'indigo', name: 'Deep Indigo', bg: '#6366f1', text: '#ffffff', border: '#4f46e5' },
-  { id: 'violet', name: 'Royal Violet', bg: '#8b5cf6', text: '#ffffff', border: '#7c3aed' },
-  { id: 'purple', name: 'Neon Purple', bg: '#a855f7', text: '#ffffff', border: '#9333ea' },
-  { id: 'fuchsia', name: 'Hot Fuchsia', bg: '#d946ef', text: '#ffffff', border: '#c026d3' },
-  { id: 'slate', name: 'Steel Slate', bg: '#64748b', text: '#ffffff', border: '#475569' },
-  { id: 'zinc', name: 'Dark Zinc', bg: '#3f3f46', text: '#ffffff', border: '#27272a' },
+  { id: 'crimson', name: 'Ruby S', bg: '#e11d48', text: '#ffffff', border: '#be123c' },
+  { id: 'ember', name: 'Flame A', bg: '#ea580c', text: '#ffffff', border: '#c2410c' },
+  { id: 'gold', name: 'Solar B', bg: '#d97706', text: '#000000', border: '#b45309' },
+  { id: 'mint', name: 'Cyber Mint C', bg: '#059669', text: '#ffffff', border: '#047857' },
+  { id: 'cerulean', name: 'Sky Cerulean D', bg: '#0284c7', text: '#ffffff', border: '#0369a1' },
+  { id: 'violet', name: 'Royal Violet F', bg: '#7c3aed', text: '#ffffff', border: '#6d28d9' },
+  { id: 'slate', name: 'Steel Slate', bg: '#475569', text: '#ffffff', border: '#334155' },
+  { id: 'rose', name: 'Neon Rose', bg: '#f43f5e', text: '#ffffff', border: '#e11d48' },
+  { id: 'amber', name: 'Pure Amber', bg: '#f59e0b', text: '#000000', border: '#d97706' },
+  { id: 'emerald', name: 'Emerald Green', bg: '#10b981', text: '#ffffff', border: '#059669' },
+  { id: 'cyan', name: 'Cyan Glow', bg: '#06b6d4', text: '#ffffff', border: '#0891b2' },
+  { id: 'indigo', name: 'Deep Indigo', bg: '#4f46e5', text: '#ffffff', border: '#4338ca' },
+  { id: 'purple', name: 'Electric Purple', bg: '#9333ea', text: '#ffffff', border: '#7e22ce' },
+  { id: 'fuchsia', name: 'Hot Fuchsia', bg: '#c026d3', text: '#ffffff', border: '#a21caf' },
+  { id: 'zinc', name: 'Obsidian Black', bg: '#18181b', text: '#ffffff', border: '#27272a' },
+  { id: 'neutral', name: 'Architect White', bg: '#e2e8f0', text: '#0f172a', border: '#cbd5e1' },
 ]
 
 export const DEFAULT_TIERS: Tier[] = [
-  { id: 'tier-s', title: 'S', color: '#ef4444', textColor: '#ffffff' },
-  { id: 'tier-a', title: 'A', color: '#f97316', textColor: '#ffffff' },
-  { id: 'tier-b', title: 'B', color: '#f59e0b', textColor: '#000000' },
-  { id: 'tier-c', title: 'C', color: '#10b981', textColor: '#ffffff' },
-  { id: 'tier-d', title: 'D', color: '#06b6d4', textColor: '#ffffff' },
-  { id: 'tier-f', title: 'F', color: '#8b5cf6', textColor: '#ffffff' },
+  { id: 'tier-s', title: 'S', color: '#e11d48', textColor: '#ffffff' },
+  { id: 'tier-a', title: 'A', color: '#ea580c', textColor: '#ffffff' },
+  { id: 'tier-b', title: 'B', color: '#d97706', textColor: '#000000' },
+  { id: 'tier-c', title: 'C', color: '#059669', textColor: '#ffffff' },
+  { id: 'tier-d', title: 'D', color: '#0284c7', textColor: '#ffffff' },
+  { id: 'tier-f', title: 'F', color: '#7c3aed', textColor: '#ffffff' },
 ]
 
 export const TEMPLATES: TemplateData[] = [

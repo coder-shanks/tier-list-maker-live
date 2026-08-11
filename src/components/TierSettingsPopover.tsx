@@ -70,7 +70,7 @@ export default function TierSettingsPopover({
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger render={children} />
-      <PopoverContent side="right" align="start" className="w-72 p-4 space-y-4">
+      <PopoverContent side="right" align="start" className="w-72 p-3.5 space-y-3.5 shadow-xl border-border bg-popover">
         {/* Tier Title Input */}
         <div className="space-y-1.5">
           <label className="text-xs font-bold text-foreground flex items-center justify-between">
@@ -104,7 +104,7 @@ export default function TierSettingsPopover({
         {/* Color Palette Presets */}
         <div className="space-y-1.5">
           <div className="flex items-center justify-between text-xs font-bold text-foreground">
-            <span>Tier Color</span>
+            <span>Grade Accent</span>
             <span className="text-[10px] font-mono text-muted-foreground">{tier.color}</span>
           </div>
 
@@ -118,11 +118,11 @@ export default function TierSettingsPopover({
                   onClick={() => handleSelectColor(preset.bg, preset.text)}
                   style={{ backgroundColor: preset.bg }}
                   title={preset.name}
-                  className="h-7 rounded-md relative flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shadow-2xs border border-black/10"
+                  className="h-6 rounded-md relative flex items-center justify-center transition-transform hover:scale-105 active:scale-95 shadow-2xs border border-black/10"
                 >
                   {isSelected && (
                     <span style={{ color: preset.text }}>
-                      <HugeiconsIcon icon={Tick02Icon} size={14} />
+                      <HugeiconsIcon icon={Tick02Icon} size={13} />
                     </span>
                   )}
                 </button>
@@ -131,17 +131,17 @@ export default function TierSettingsPopover({
           </div>
 
           {/* Custom Color Input */}
-          <div className="flex gap-1.5 items-center pt-1.5">
+          <div className="flex gap-1.5 items-center pt-1">
             <Input
               type="text"
               value={customHex}
               onChange={(e) => handleCustomColor(e.target.value)}
-              placeholder="#ef4444"
+              placeholder="#e11d48"
               className="h-7 text-xs font-mono"
             />
             <input
               type="color"
-              value={customHex.startsWith('#') && customHex.length >= 4 ? customHex : '#ef4444'}
+              value={customHex.startsWith('#') && customHex.length >= 4 ? customHex : '#e11d48'}
               onChange={(e) => handleCustomColor(e.target.value)}
               className="w-7 h-7 rounded-md border-0 bg-transparent cursor-pointer p-0 shrink-0"
               title="Pick custom color"
@@ -150,7 +150,7 @@ export default function TierSettingsPopover({
         </div>
 
         {/* Action Controls */}
-        <div className="pt-2 border-t border-border/80 flex flex-col gap-1">
+        <div className="pt-2 border-t border-border flex flex-col gap-1">
           <div className="grid grid-cols-2 gap-1.5">
             <Button
               type="button"
@@ -183,7 +183,7 @@ export default function TierSettingsPopover({
               size="xs"
               disabled={itemCount === 0}
               onClick={() => clearTier(tier.id)}
-              className="justify-start gap-1 text-[11px] h-7 text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40"
+              className="justify-start gap-1 text-[11px] h-7 text-amber-600 dark:text-amber-400 hover:bg-amber-500/10"
             >
               <HugeiconsIcon icon={RotateLeft01Icon} size={13} />
               Clear Items
@@ -196,7 +196,7 @@ export default function TierSettingsPopover({
                 deleteTier(tier.id)
                 setIsOpen(false)
               }}
-              className="justify-start gap-1 text-[11px] h-7 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+              className="justify-start gap-1 text-[11px] h-7 text-destructive hover:bg-destructive/10"
             >
               <HugeiconsIcon icon={Delete02Icon} size={13} />
               Delete Tier

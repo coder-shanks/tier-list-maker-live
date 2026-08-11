@@ -29,7 +29,6 @@ export default function App() {
     setPreviewMode,
     fullscreenMode,
     setFullscreenMode,
-    presentationTheme,
   } = useTierListStore()
 
   // Sync theme class on document element
@@ -47,7 +46,7 @@ export default function App() {
   // Active dragged item for DragOverlay
   const activeItem = items.find((it) => it.id === activeDragId)
 
-  // Global Keyboard Shortcuts (F for Fullscreen, P for Preview, Esc for exit, Cmd+Z, Cmd+Y, Cmd+E, N, R)
+  // Global Keyboard Shortcuts (F, P, Esc, Cmd+Z, Cmd+Y, Cmd+E, N, R)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Ignore when typing inside input / textarea
@@ -70,7 +69,6 @@ export default function App() {
         e.preventDefault()
         setExportOpen(true)
       } else if (e.key.toLowerCase() === 'f' && !e.metaKey && !e.ctrlKey) {
-        // 'f' for fullscreen
         e.preventDefault()
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen().catch(() => {})
@@ -78,23 +76,27 @@ export default function App() {
         } else {
           document.exitFullscreen().catch(() => {})
           setFullscreenMode(false)
+          setPreviewMode(false)
         }
       } else if (e.key.toLowerCase() === 'p' && !e.metaKey && !e.ctrlKey) {
-        // 'p' for preview mode
         e.preventDefault()
-        setPreviewMode(!previewMode)
-      } else if (e.key === 'Escape') {
-        if (previewMode) setPreviewMode(false)
-        if (fullscreenMode) {
-          if (document.fullscreenElement) document.exitFullscreen().catch(() => {})
+        if (previewMode) {
+          setPreviewMode(false)
           setFullscreenMode(false)
+          if (document.fullscreenElement) document.exitFullscreen().catch(() => {})
+        } else {
+          setPreviewMode(true)
+        }
+      } else if (e.key === 'Escape') {
+        setPreviewMode(false)
+        setFullscreenMode(false)
+        if (document.fullscreenElement) {
+          document.exitFullscreen().catch(() => {})
         }
       } else if (e.key.toLowerCase() === 'n' && !e.metaKey && !e.ctrlKey) {
-        // 'n' for new custom item
         e.preventDefault()
         setAddItemOpen(true)
       } else if (e.key.toLowerCase() === 'r' && !e.metaKey && !e.ctrlKey) {
-        // 'r' for roulette
         e.preventDefault()
         setRandomPickerOpen(true)
       }
@@ -104,14 +106,8 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [undo, redo, setExportOpen, setAddItemOpen, setRandomPickerOpen, previewMode, setPreviewMode, fullscreenMode, setFullscreenMode])
 
-  // Theme container classes
-  const pageBgClasses = {
-    studio: 'bg-zinc-50 dark:bg-zinc-950',
-    neon: 'bg-zinc-950 dark:bg-black bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-950/40 via-zinc-950 to-black',
-    slate: 'bg-slate-50 dark:bg-slate-950',
-    noir: 'bg-stone-50 dark:bg-stone-950',
-    clean: 'bg-zinc-50 dark:bg-zinc-950',
-  }[presentationTheme]
+  // Background style classes
+  const pageBgClass = theme === 'dark' ? 'studio-grid-dark' : 'studio-grid-light'
 
   return (
     <TooltipProvider delay={0}>
@@ -129,25 +125,25 @@ export default function App() {
         }}
       >
         <div
-          className={`min-h-screen ${pageBgClasses} text-zinc-900 dark:text-zinc-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white antialiased transition-colors duration-300 relative`}
+          className={`min-h-screen ${pageBgClass} text-foreground flex flex-col font-sans antialiased transition-colors duration-200 relative`}
         >
-          {/* Top Navbar Toolbar (Hidden in Fullscreen presentation mode if desired or kept clean) */}
+          {/* Top Navbar Studio Bar */}
           {!fullscreenMode && <Navbar />}
 
-          {/* Main Workspace Area */}
+          {/* Main Canvas Area */}
           <main
-            className={`flex-1 px-3 sm:px-6 max-w-7xl w-full mx-auto space-y-6 transition-all duration-300 ${
-              fullscreenMode ? 'py-8 sm:py-12' : 'py-6 sm:py-8'
+            className={`flex-1 px-3 sm:px-6 max-w-7xl w-full mx-auto space-y-4 sm:space-y-6 transition-all duration-200 ${
+              fullscreenMode ? 'py-6 sm:py-10' : 'py-4 sm:py-6'
             }`}
           >
             {/* Main Tier Canvas */}
             <TierList />
 
-            {/* Unassigned Items Pool Dock */}
+            {/* Unassigned Item Vault Dock */}
             <ItemsList />
           </main>
 
-          {/* Drag Overlay: Renders tactile floating item card while dragging */}
+          {/* Drag Overlay: Tactile elevated rank card */}
           <DragOverlay>
             {activeItem ? (
               <DraggableItem
@@ -157,28 +153,27 @@ export default function App() {
             ) : null}
           </DragOverlay>
 
-          {/* Floating Presentation / Fullscreen Controls Dock */}
+          {/* Presentation HUD View */}
           <FullscreenView />
 
-          {/* Footer info (Hidden in Preview & Fullscreen Mode) */}
+          {/* Architectural Footer with Key Shortcuts */}
           {!previewMode && !fullscreenMode && (
-            <footer className="py-6 border-t border-zinc-200 dark:border-zinc-900 text-center text-xs text-zinc-500 dark:text-zinc-500 space-y-1.5 transition-colors">
-              <p className="font-medium">
-                Live Tier List Maker • 100% Free & Open-Source Community Tool
-              </p>
-              <div className="flex flex-wrap items-center justify-center gap-1.5 text-[11px] text-zinc-400 dark:text-zinc-500">
-                <span>Shortcuts:</span>
-                <kbd className="px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 font-mono">⌘/Ctrl+Z</kbd> Undo
+            <footer className="py-5 border-t border-border/80 text-center text-xs text-muted-foreground space-y-1.5 transition-colors">
+              <div className="flex flex-wrap items-center justify-center gap-2 text-[11px] font-mono">
+                <span className="text-foreground font-semibold">Shortcuts:</span>
+                <span className="inline-flex items-center gap-1"><kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground border border-border">⌘Z</kbd> Undo</span>
                 <span>•</span>
-                <kbd className="px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 font-mono">⌘/Ctrl+Y</kbd> Redo
+                <span className="inline-flex items-center gap-1"><kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground border border-border">⌘Y</kbd> Redo</span>
                 <span>•</span>
-                <kbd className="px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 font-mono">F</kbd> Fullscreen
+                <span className="inline-flex items-center gap-1"><kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground border border-border">F</kbd> Fullscreen</span>
                 <span>•</span>
-                <kbd className="px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 font-mono">P</kbd> Preview
+                <span className="inline-flex items-center gap-1"><kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground border border-border">P</kbd> Present</span>
                 <span>•</span>
-                <kbd className="px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 font-mono">N</kbd> New Item
+                <span className="inline-flex items-center gap-1"><kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground border border-border">N</kbd> New Item</span>
                 <span>•</span>
-                <kbd className="px-1.5 py-0.5 rounded bg-zinc-200 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 font-mono">R</kbd> Roulette
+                <span className="inline-flex items-center gap-1"><kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground border border-border">R</kbd> Roulette</span>
+                <span>•</span>
+                <span className="inline-flex items-center gap-1"><kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground border border-border">⌘E</kbd> Export</span>
               </div>
             </footer>
           )}

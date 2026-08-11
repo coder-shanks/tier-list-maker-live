@@ -37,7 +37,7 @@ export default function ItemsList() {
     previewMode,
   } = useTierListStore()
 
-  const poolItemIds = containers['POOL'] || []
+  const poolItemIds = useMemo(() => containers['POOL'] || [], [containers])
   const totalItems = items.length
   const rankedCount = totalItems - poolItemIds.length
   const percentRanked = totalItems > 0 ? Math.round((rankedCount / totalItems) * 100) : 0
@@ -69,129 +69,130 @@ export default function ItemsList() {
   if (previewMode) return null
 
   return (
-    <div className="w-full max-w-7xl mx-auto mt-6">
-      <div className="bg-white dark:bg-zinc-950/90 border border-zinc-200 dark:border-zinc-800/90 rounded-2xl p-4 sm:p-5 shadow-xl dark:shadow-2xl backdrop-blur-xl space-y-4 transition-colors">
-        {/* Pool Header Bar */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-zinc-200 dark:border-zinc-800/80">
+    <div className="w-full max-w-7xl mx-auto mt-4 sm:mt-6">
+      <div className="bg-card border border-border rounded-xl p-3.5 sm:p-5 shadow-lg space-y-3.5 transition-colors">
+        {/* Vault Header Bar */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 border-b border-border">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 text-indigo-600 dark:text-indigo-400">
-              <HugeiconsIcon icon={FolderAddIcon} size={18} />
+            <div className="p-2 rounded-lg bg-secondary border border-border text-foreground">
+              <HugeiconsIcon icon={FolderAddIcon} size={16} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-extrabold text-base sm:text-lg text-zinc-900 dark:text-white tracking-tight">
-                  Unassigned Items Pool
+                <h2 className="font-extrabold text-sm sm:text-base text-foreground tracking-tight" style={{ fontFamily: 'var(--font-display)' }}>
+                  Unranked Item Vault
                 </h2>
-                <Badge variant="secondary" className="text-xs font-mono font-bold">
-                  {poolItemIds.length} remaining
+                <Badge variant="secondary" className="text-[10px] font-mono font-bold px-1.5 py-0">
+                  {poolItemIds.length} left
                 </Badge>
               </div>
-              <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
-                Drag any item to rank it onto the board, or click the 3-dots to quick-assign.
+              <p className="text-xs text-muted-foreground">
+                Drag tiles onto the board or click 3-dots on any card to quick-place.
               </p>
             </div>
           </div>
 
           {/* Action Toolbar */}
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             {/* Streamer Roulette Random Picker Button */}
-            <SimpleTooltip content="Spin random unassigned item to rank" shortcut="R" side="top">
+            <SimpleTooltip content="Spin random item for stream / audience ranking" shortcut="R" side="top">
               <Button
                 size="sm"
                 onClick={() => setRandomPickerOpen(true)}
                 disabled={poolItemIds.length === 0}
-                className="bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold gap-1.5 shadow-md shadow-indigo-500/20 active:scale-95 transition-transform"
+                className="bg-rose-600 hover:bg-rose-500 text-white font-bold gap-1.5 h-8 text-xs shadow-xs active:scale-95 transition-transform"
               >
-                <HugeiconsIcon icon={DicesIcon} size={16} />
-                <span>Streamer Roulette</span>
+                <HugeiconsIcon icon={DicesIcon} size={15} />
+                <span>Roulette</span>
               </Button>
             </SimpleTooltip>
 
             {/* Add Custom Item Modal Trigger */}
-            <SimpleTooltip content="Add custom item, search open-source images, or bulk add" shortcut="N" side="top">
+            <SimpleTooltip content="Add item from Wikipedia search, URL, or bulk list" shortcut="N" side="top">
               <Button
                 size="sm"
+                variant="outline"
                 onClick={() => setAddItemOpen(true)}
-                className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold gap-1.5 shadow-md shadow-indigo-600/20 active:scale-95 transition-transform"
+                className="font-bold gap-1.5 h-8 text-xs bg-secondary border-border active:scale-95 transition-transform"
               >
-                <HugeiconsIcon icon={PlusSignIcon} size={16} />
+                <HugeiconsIcon icon={PlusSignIcon} size={15} />
                 <span>Add Item</span>
               </Button>
             </SimpleTooltip>
 
             {/* Shuffle Pool */}
-            <SimpleTooltip content="Shuffle unassigned items order" side="top">
+            <SimpleTooltip content="Shuffle vault order" side="top">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={shufflePool}
                 disabled={poolItemIds.length <= 1}
-                className="bg-zinc-100 dark:bg-zinc-900 border-zinc-300 dark:border-zinc-800 px-2.5 active:scale-95"
+                className="bg-secondary border-border px-2 h-8 active:scale-95"
               >
-                <HugeiconsIcon icon={ShuffleIcon} size={16} />
+                <HugeiconsIcon icon={ShuffleIcon} size={15} />
               </Button>
             </SimpleTooltip>
 
             {/* Reset All Items to Pool */}
-            <SimpleTooltip content="Return all ranked items back into this pool" side="top">
+            <SimpleTooltip content="Clear board and return all items back into vault" side="top">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={resetAllToPool}
-                className="bg-zinc-100 dark:bg-zinc-900 border-zinc-300 dark:border-zinc-800 text-amber-600 dark:text-amber-400 gap-1.5 active:scale-95"
+                className="bg-secondary border-border text-amber-500 hover:text-amber-600 hover:bg-amber-500/10 gap-1.5 h-8 text-xs active:scale-95"
               >
-                <HugeiconsIcon icon={RotateLeft01Icon} size={14} />
+                <HugeiconsIcon icon={RotateLeft01Icon} size={13} />
                 <span className="hidden sm:inline">Reset Board</span>
               </Button>
             </SimpleTooltip>
           </div>
         </div>
 
-        {/* Live Progress Bar */}
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+        {/* Progress Metric Bar */}
+        <div className="space-y-1">
+          <div className="flex items-center justify-between text-xs font-semibold text-muted-foreground">
             <span className="flex items-center gap-1">
-              <HugeiconsIcon icon={SparklesIcon} size={13} className="text-indigo-500" />
-              Ranking Progress
+              <HugeiconsIcon icon={SparklesIcon} size={12} className="text-rose-500" />
+              <span>Completion</span>
             </span>
-            <span className="font-mono font-bold text-zinc-800 dark:text-zinc-200">
-              {rankedCount} of {totalItems} items ({percentRanked}%)
+            <span className="font-mono font-bold text-foreground text-[11px]">
+              {rankedCount} / {totalItems} items ({percentRanked}%)
             </span>
           </div>
-          <div className="w-full h-2 rounded-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden border border-zinc-200 dark:border-zinc-800">
+          <div className="w-full h-1.5 rounded-full bg-secondary overflow-hidden border border-border">
             <div
               style={{ width: `${percentRanked}%` }}
-              className="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-emerald-500 rounded-full transition-all duration-500 ease-out"
+              className="h-full bg-rose-500 rounded-full transition-all duration-300 ease-out"
             />
           </div>
         </div>
 
         {/* Filter and Search Bar */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-1">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 pt-1">
           {/* Search Box */}
           <div className="relative flex-1 max-w-sm">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500">
-              <HugeiconsIcon icon={Search01Icon} size={15} />
+            <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground">
+              <HugeiconsIcon icon={Search01Icon} size={14} />
             </span>
             <Input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search unassigned items..."
-              className="pl-9 h-8 text-xs bg-zinc-50 dark:bg-zinc-900/90 border-zinc-300 dark:border-zinc-800"
+              placeholder="Search vault items..."
+              className="pl-8 h-8 text-xs bg-secondary border-border"
             />
           </div>
 
           {/* Category Filter Pills */}
           {categories.length > 1 && (
-            <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+            <div className="flex flex-wrap items-center gap-1 overflow-x-auto pb-1 sm:pb-0">
               <button
                 type="button"
                 onClick={() => setSelectedCategory(null)}
-                className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all active:scale-95 ${
+                className={`px-2.5 py-1 text-[11px] font-mono font-semibold rounded-md transition-all active:scale-95 ${
                   selectedCategory === null
-                    ? 'bg-zinc-900 dark:bg-zinc-200 text-white dark:text-black'
-                    : 'bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 border border-zinc-200 dark:border-zinc-800'
+                    ? 'bg-foreground text-background'
+                    : 'bg-secondary text-muted-foreground hover:text-foreground border border-border'
                 }`}
               >
                 All ({poolItemIds.length})
@@ -208,10 +209,10 @@ export default function ItemsList() {
                     onClick={() =>
                       setSelectedCategory(selectedCategory === cat ? null : cat)
                     }
-                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all active:scale-95 ${
+                    className={`px-2.5 py-1 text-[11px] font-mono font-semibold rounded-md transition-all active:scale-95 ${
                       selectedCategory === cat
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 border border-zinc-200 dark:border-zinc-800'
+                        ? 'bg-rose-600 text-white'
+                        : 'bg-secondary text-muted-foreground hover:text-foreground border border-border'
                     }`}
                   >
                     {cat} ({count})
@@ -222,38 +223,38 @@ export default function ItemsList() {
           )}
         </div>
 
-        {/* Draggable Drop Zone Area */}
+        {/* Droppable Vault Surface */}
         <div
           ref={ref}
-          className={`min-h-[140px] p-3 sm:p-4 rounded-xl border flex flex-wrap gap-2.5 items-center content-start transition-all duration-200 ${
+          className={`min-h-[120px] p-2.5 sm:p-3 rounded-lg border flex flex-wrap gap-2 sm:gap-2.5 items-center content-start transition-all duration-150 ${
             isDropTarget
-              ? 'bg-indigo-50/80 dark:bg-indigo-950/30 border-indigo-400 ring-2 ring-indigo-500/20'
-              : 'bg-zinc-50/50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800/80'
+              ? 'bg-accent/60 border-rose-500/80 ring-2 ring-rose-500/20'
+              : 'bg-background/50 border-border/80'
           }`}
         >
           {poolItemIds.length === 0 ? (
-            <div className="w-full py-10 flex flex-col items-center justify-center text-center space-y-2">
-              <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
-                <HugeiconsIcon icon={Tick02Icon} size={24} />
+            <div className="w-full py-8 flex flex-col items-center justify-center text-center space-y-1.5">
+              <div className="w-9 h-9 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
+                <HugeiconsIcon icon={Tick02Icon} size={20} />
               </div>
-              <h4 className="font-bold text-zinc-900 dark:text-white text-sm">
-                All Items Have Been Ranked! 🎉
+              <h4 className="font-bold text-foreground text-xs sm:text-sm">
+                All Items Have Been Placed
               </h4>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm">
-                Every item is assigned to a tier. You can export your tier list or add more custom items below.
+              <p className="text-xs text-muted-foreground max-w-sm">
+                Every tile has been assigned a grade. You can export your list or add custom cards.
               </p>
               <Button
                 variant="outline"
-                size="sm"
+                size="xs"
                 onClick={() => setAddItemOpen(true)}
-                className="mt-2 text-xs font-semibold active:scale-95"
+                className="mt-1 text-xs font-semibold active:scale-95 h-7"
               >
                 + Add Another Item
               </Button>
             </div>
           ) : filteredPoolItems.length === 0 ? (
-            <div className="w-full py-8 text-center text-zinc-400 dark:text-zinc-500 text-xs">
-              No items match your current search or category filter.
+            <div className="w-full py-8 text-center text-muted-foreground text-xs font-mono">
+              No vault items match "{searchQuery}".
             </div>
           ) : (
             filteredPoolItems.map((item) => (

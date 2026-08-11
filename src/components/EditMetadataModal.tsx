@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -13,27 +13,11 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { Edit02Icon } from '@hugeicons/core-free-icons'
 import { useTierListStore } from '../store/useTierListStore'
 
-export default function EditMetadataModal() {
-  const {
-    isEditMetadataOpen,
-    setEditMetadataOpen,
-    title,
-    subtitle,
-    author,
-    updateMetadata,
-  } = useTierListStore()
-
+function EditMetadataForm({ onClose }: { onClose: () => void }) {
+  const { title, subtitle, author, updateMetadata } = useTierListStore()
   const [localTitle, setLocalTitle] = useState(title)
   const [localSubtitle, setLocalSubtitle] = useState(subtitle)
   const [localAuthor, setLocalAuthor] = useState(author)
-
-  useEffect(() => {
-    if (isEditMetadataOpen) {
-      setLocalTitle(title)
-      setLocalSubtitle(subtitle)
-      setLocalAuthor(author)
-    }
-  }, [isEditMetadataOpen, title, subtitle, author])
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
@@ -42,83 +26,94 @@ export default function EditMetadataModal() {
       subtitle: localSubtitle.trim() || 'Ranked live',
       author: localAuthor.trim() || 'Creator',
     })
-    setEditMetadataOpen(false)
+    onClose()
   }
 
   return (
+    <form onSubmit={handleSave} className="space-y-3.5 py-1">
+      <div className="space-y-1">
+        <label className="text-xs font-semibold text-foreground">
+          Tier List Title *
+        </label>
+        <Input
+          type="text"
+          required
+          value={localTitle}
+          onChange={(e) => setLocalTitle(e.target.value)}
+          placeholder="e.g. Best Video Games of All Time"
+          className="h-9 text-xs font-semibold bg-secondary border-border"
+          autoFocus
+        />
+      </div>
+
+      <div className="space-y-1">
+        <label className="text-xs font-semibold text-foreground">
+          Ranking Criteria / Subtitle
+        </label>
+        <Input
+          type="text"
+          value={localSubtitle}
+          onChange={(e) => setLocalSubtitle(e.target.value)}
+          placeholder="e.g. Ranked live on stream based on personal fun & replayability"
+          className="h-9 text-xs bg-secondary border-border"
+        />
+      </div>
+
+      <div className="space-y-1">
+        <label className="text-xs font-semibold text-foreground">
+          Creator Watermark Name
+        </label>
+        <Input
+          type="text"
+          value={localAuthor}
+          onChange={(e) => setLocalAuthor(e.target.value)}
+          placeholder="e.g. @shubham.tarade or Streamer Name"
+          className="h-9 text-xs bg-secondary border-border"
+        />
+      </div>
+
+      <DialogFooter className="pt-2">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onClose}
+          className="h-8 text-xs"
+        >
+          Cancel
+        </Button>
+        <Button type="submit" className="h-8 text-xs font-bold bg-foreground text-background">
+          Save Changes
+        </Button>
+      </DialogFooter>
+    </form>
+  )
+}
+
+export default function EditMetadataModal() {
+  const { isEditMetadataOpen, setEditMetadataOpen } = useTierListStore()
+
+  return (
     <Dialog open={isEditMetadataOpen} onOpenChange={setEditMetadataOpen}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-md bg-card border-border">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+            <div className="p-2 rounded-lg bg-secondary text-foreground">
               <HugeiconsIcon icon={Edit02Icon} size={18} />
             </div>
             <div>
-              <DialogTitle className="text-base sm:text-lg font-bold">
-                Edit Tier List Info
+              <DialogTitle className="text-base font-bold" style={{ fontFamily: 'var(--font-display)' }}>
+                Board Details & Author
               </DialogTitle>
               <DialogDescription className="text-xs">
-                Update the title, subtitle/criteria, and creator watermark.
+                Customize the title, ranking criteria subtitle, and watermark name.
               </DialogDescription>
             </div>
           </div>
         </DialogHeader>
 
-        <form onSubmit={handleSave} className="space-y-4 py-2">
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-foreground">
-              Tier List Title *
-            </label>
-            <Input
-              type="text"
-              required
-              value={localTitle}
-              onChange={(e) => setLocalTitle(e.target.value)}
-              placeholder="e.g. Best Video Games of All Time"
-              className="h-10 text-sm font-medium"
-              autoFocus
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-foreground">
-              Subtitle / Ranking Criteria
-            </label>
-            <Input
-              type="text"
-              value={localSubtitle}
-              onChange={(e) => setLocalSubtitle(e.target.value)}
-              placeholder="e.g. Ranked live on stream based on personal fun & replayability"
-              className="h-10 text-sm"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-foreground">
-              Creator Watermark / Author Name
-            </label>
-            <Input
-              type="text"
-              value={localAuthor}
-              onChange={(e) => setLocalAuthor(e.target.value)}
-              placeholder="e.g. @shubham.tarade or Streamer Name"
-              className="h-10 text-sm"
-            />
-          </div>
-
-          <DialogFooter className="pt-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setEditMetadataOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button type="submit">
-              Save Changes
-            </Button>
-          </DialogFooter>
-        </form>
+        {isEditMetadataOpen && (
+          <EditMetadataForm onClose={() => setEditMetadataOpen(false)} />
+        )}
       </DialogContent>
     </Dialog>
   )
