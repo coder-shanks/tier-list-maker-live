@@ -1,3 +1,4 @@
+import confetti from 'canvas-confetti'
 import { HugeiconsIcon } from '@hugeicons/react'
 import {
   PlusSignIcon,
@@ -5,7 +6,7 @@ import {
   Edit02Icon,
   UserIcon,
   FolderAddIcon,
-  EyeOffIcon,
+  SparklesIcon,
 } from '@hugeicons/core-free-icons'
 import { useTierListStore } from '../store/useTierListStore'
 import TierRow from './TierRow'
@@ -24,37 +25,58 @@ export default function TierList() {
     containers,
     addTier,
     previewMode,
-    setPreviewMode,
+    presentationTheme,
     setEditMetadataOpen,
   } = useTierListStore()
 
-  // Calculate clear, self-explanatory statistics
+  // Calculate statistics
   const totalItemsCount = items.length
   const unassignedCount = (containers['POOL'] || []).length
   const rankedCount = totalItemsCount - unassignedCount
   const percentRanked = totalItemsCount > 0 ? Math.round((rankedCount / totalItemsCount) * 100) : 0
+  const isAllRanked = totalItemsCount > 0 && unassignedCount === 0
+
+  const triggerCelebrate = () => {
+    confetti({
+      particleCount: 120,
+      spread: 90,
+      origin: { y: 0.6 },
+      colors: ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'],
+    })
+  }
+
+  // Theme canvas background classes
+  const themeCanvasClasses = {
+    studio: 'bg-white dark:bg-zinc-950/95 border-zinc-200 dark:border-zinc-800/90 shadow-2xl',
+    neon: 'bg-zinc-950 border-indigo-500/40 shadow-2xl shadow-indigo-500/10 ring-1 ring-indigo-500/20',
+    slate: 'bg-slate-950 border-slate-800 shadow-2xl shadow-slate-900/50',
+    noir: 'bg-stone-950 border-stone-800 shadow-2xl shadow-stone-900/50',
+    clean: 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-xl',
+  }[presentationTheme]
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-4">
       {/* Edit Metadata Modal */}
       <EditMetadataModal />
 
-      {/* Preview Mode Active Helper Banner */}
-      {previewMode && (
-        <div className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-700 dark:text-purple-300 text-xs font-semibold animate-in fade-in">
+      {/* 100% Completion Milestone Celebration Banner */}
+      {isAllRanked && !previewMode && (
+        <div className="flex items-center justify-between p-3.5 px-4 rounded-2xl bg-linear-to-r from-emerald-500/15 via-teal-500/15 to-indigo-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-semibold animate-in fade-in slide-in-from-top-2 duration-300">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-purple-500 animate-ping" />
+            <span className="p-1.5 rounded-xl bg-emerald-500/20 text-emerald-400">
+              <HugeiconsIcon icon={SparklesIcon} size={16} />
+            </span>
             <span>
-              Preview Mode Active (Editing controls and action buttons hidden for clean broadcast/viewing)
+              All {totalItemsCount} items have been ranked! Tier list is complete.
             </span>
           </div>
           <Button
             size="xs"
-            onClick={() => setPreviewMode(false)}
-            className="bg-purple-600 hover:bg-purple-500 text-white font-bold gap-1 text-[11px]"
+            onClick={triggerCelebrate}
+            className="bg-emerald-600 hover:bg-emerald-500 text-white font-bold gap-1 text-[11px] rounded-xl shadow-xs active:scale-95"
           >
-            <HugeiconsIcon icon={EyeOffIcon} size={13} />
-            Exit Preview
+            <HugeiconsIcon icon={SparklesIcon} size={13} />
+            Celebrate 🎉
           </Button>
         </div>
       )}
@@ -62,7 +84,7 @@ export default function TierList() {
       {/* Tier Board Container (Captured during PNG Export) */}
       <div
         id="tier-list-canvas"
-        className="bg-white dark:bg-zinc-950/90 border border-zinc-200 dark:border-zinc-800/90 rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden backdrop-blur-xl transition-all duration-300"
+        className={`rounded-2xl overflow-hidden backdrop-blur-xl transition-all duration-300 ${themeCanvasClasses}`}
       >
         {/* Board Header Section */}
         <div className="p-4 sm:p-6 bg-zinc-50/80 dark:bg-linear-to-b dark:from-zinc-900/90 dark:to-zinc-950/90 border-b border-zinc-200 dark:border-zinc-800/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -112,7 +134,7 @@ export default function TierList() {
             </div>
           </div>
 
-          {/* Clear & Self-Explanatory Statistics */}
+          {/* Statistics */}
           <div className="flex items-center gap-2 shrink-0">
             {/* Total Ranked Count */}
             <SimpleTooltip content={`${rankedCount} out of ${totalItemsCount} items placed in tiers`} side="bottom">
@@ -156,7 +178,7 @@ export default function TierList() {
               <Button
                 size="sm"
                 onClick={() => addTier('bottom')}
-                className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold"
+                className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold active:scale-95"
               >
                 + Add First Tier
               </Button>
@@ -183,7 +205,7 @@ export default function TierList() {
               variant="outline"
               size="sm"
               onClick={() => addTier('bottom')}
-              className="gap-2 font-semibold bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-2xs group"
+              className="gap-2 font-semibold bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-800 shadow-2xs group active:scale-95"
             >
               <span className="text-indigo-600 dark:text-indigo-400 group-hover:rotate-90 transition-transform duration-200">
                 <HugeiconsIcon icon={PlusSignIcon} size={16} />
@@ -193,7 +215,7 @@ export default function TierList() {
           </SimpleTooltip>
 
           <p className="text-[11px] text-zinc-500 dark:text-zinc-500 hidden sm:block">
-            Tip: Click any tier label to rename or change its color.
+            Tip: Click any tier label to rename or customize colors.
           </p>
         </div>
       )}

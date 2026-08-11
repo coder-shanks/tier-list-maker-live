@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useDraggable } from '@dnd-kit/react'
 import { HugeiconsIcon } from '@hugeicons/react'
 import {
@@ -22,17 +22,20 @@ type DraggableItemProps = {
   item: TierItem
   currentContainerId?: string
   isDragging?: boolean
+  isOverlay?: boolean
 }
 
 export default function DraggableItem({
   item,
   currentContainerId,
-  isDragging = false,
+  isDragging: propIsDragging = false,
+  isOverlay = false,
 }: DraggableItemProps) {
-  const { ref } = useDraggable({
+  const { ref, isDragging: dndIsDragging } = useDraggable({
     id: item.id,
   })
 
+  const isDragging = propIsDragging || dndIsDragging
   const [imgError, setImgError] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -48,16 +51,16 @@ export default function DraggableItem({
     previewMode,
   } = useTierListStore()
 
-  // Generate deterministic gradient for items without valid image
+  // Generate deterministic rich gradient for items without valid image
   const getGradient = (name: string) => {
     const gradients = [
-      'from-rose-500 to-orange-500',
-      'from-amber-500 to-yellow-500',
-      'from-emerald-500 to-teal-500',
-      'from-blue-500 to-indigo-500',
-      'from-violet-500 to-purple-500',
-      'from-fuchsia-500 to-pink-500',
-      'from-cyan-500 to-blue-600',
+      'from-rose-600 via-rose-500 to-amber-500',
+      'from-amber-600 via-orange-500 to-yellow-400',
+      'from-emerald-600 via-teal-500 to-cyan-500',
+      'from-blue-600 via-indigo-600 to-violet-600',
+      'from-violet-600 via-purple-600 to-fuchsia-600',
+      'from-fuchsia-600 via-pink-600 to-rose-500',
+      'from-cyan-600 via-sky-600 to-indigo-600',
     ]
     let hash = 0
     for (let i = 0; i < name.length; i++) {
@@ -86,12 +89,16 @@ export default function DraggableItem({
 
   return (
     <div
-      ref={ref}
-      className={`group relative select-none rounded-xl overflow-hidden shadow-md transition-all duration-200 cursor-grab active:cursor-grabbing border border-zinc-300/40 dark:border-white/10 hover:border-indigo-500 dark:hover:border-indigo-400/80 hover:shadow-indigo-500/20 hover:scale-[1.03] ${sizeClasses} ${
-        isDragging ? 'opacity-40 scale-95 ring-2 ring-indigo-500' : 'opacity-100'
-      }`}
+      ref={isOverlay ? undefined : ref}
+      className={`group relative select-none rounded-xl overflow-hidden transition-all duration-200 cursor-grab active:cursor-grabbing border ${
+        isOverlay
+          ? 'scale-105 rotate-2 shadow-2xl shadow-indigo-500/40 border-indigo-400 ring-4 ring-indigo-500/30 z-50 pointer-events-none'
+          : isDragging
+          ? 'opacity-25 scale-95 border-dashed border-indigo-400/80 ring-2 ring-indigo-500/40 shadow-inner'
+          : 'opacity-100 shadow-md hover:shadow-xl hover:shadow-indigo-500/20 border-zinc-300/40 dark:border-white/10 hover:border-indigo-400 dark:hover:border-indigo-400/80 hover:scale-[1.04] active:scale-95'
+      } ${sizeClasses}`}
     >
-      {/* Background Image or Gradient */}
+      {/* Background Image with Fallback */}
       {item.imageUrl && !imgError ? (
         <img
           src={item.imageUrl}
@@ -100,26 +107,32 @@ export default function DraggableItem({
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
           loading="lazy"
           crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
         />
       ) : (
         <div
           className={`w-full h-full bg-linear-to-br ${getGradient(
             item.title,
-          )} flex flex-col items-center justify-center p-1 text-center font-bold text-white shadow-inner`}
+          )} flex flex-col items-center justify-center p-1.5 text-center font-black text-white shadow-inner relative`}
         >
-          <span className="text-base sm:text-lg opacity-90 drop-shadow-xs">
-            {item.title.slice(0, 2).toUpperCase()}
+          <span className="text-sm sm:text-base tracking-wider uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] font-mono">
+            {item.title.slice(0, 3)}
           </span>
+          {item.category && (
+            <span className="text-[8px] uppercase tracking-widest text-white/75 mt-0.5 max-w-[90%] truncate">
+              {item.category}
+            </span>
+          )}
         </div>
       )}
 
-      {/* Subtle Dark Vignette / Gradient Overlay for Readability */}
+      {/* Subtle Dark Vignette / Gradient Overlay for High Readability */}
       <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent pointer-events-none" />
 
       {/* Item Title Label */}
       <div className="absolute bottom-0 inset-x-0 p-1 sm:p-1.5 pointer-events-none">
         <p
-          className="font-semibold text-white text-[10px] sm:text-xs leading-tight line-clamp-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] text-center tracking-tight"
+          className="font-bold text-white text-[10px] sm:text-xs leading-tight line-clamp-2 drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)] text-center tracking-tight"
           title={item.title}
         >
           {item.title}
@@ -129,14 +142,14 @@ export default function DraggableItem({
       {/* Category Tag pill (for large mode) */}
       {itemSize === 'large' && item.category && (
         <div className="absolute top-1 left-1 pointer-events-none">
-          <span className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-black/60 backdrop-blur-xs text-zinc-200 border border-white/10">
+          <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-md bg-black/70 backdrop-blur-xs text-zinc-200 border border-white/10 shadow-xs">
             {item.category}
           </span>
         </div>
       )}
 
-      {/* Quick Action Menu Trigger (Hidden in Preview mode) */}
-      {!previewMode && (
+      {/* Quick Action Menu Trigger (Hidden in Preview / Overlay mode) */}
+      {!previewMode && !isOverlay && (
         <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <PopoverTrigger
@@ -144,7 +157,7 @@ export default function DraggableItem({
                 <button
                   type="button"
                   onClick={(e) => e.stopPropagation()}
-                  className="p-1 rounded-md bg-black/70 hover:bg-black text-white/90 hover:text-white backdrop-blur-xs shadow-md border border-white/20"
+                  className="p-1 rounded-md bg-black/80 hover:bg-black text-white/90 hover:text-white backdrop-blur-xs shadow-md border border-white/20 active:scale-90 transition-transform"
                   title="Item Options"
                 >
                   <HugeiconsIcon icon={MoreVerticalIcon} size={14} />
@@ -154,7 +167,7 @@ export default function DraggableItem({
             <PopoverContent
               side="bottom"
               align="start"
-              className="w-56 p-3 space-y-2.5"
+              className="w-56 p-3 space-y-2.5 shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header with Title & Edit Trigger */}

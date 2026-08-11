@@ -3,11 +3,23 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import { COLOR_PRESETS, TEMPLATES } from '../lib/constants'
 import type { ItemSize, TemplateData, Tier, TierItem, TierListContainers, TierListHistoryState } from '../lib/types'
 
+export type PresentationTheme = 'studio' | 'neon' | 'slate' | 'noir' | 'clean'
+
 interface TierListState {
   // Theme & Appearance
   theme: 'dark' | 'light'
   setTheme: (theme: 'dark' | 'light') => void
   toggleTheme: () => void
+
+  // Presentation & Fullscreen
+  presentationTheme: PresentationTheme
+  setPresentationTheme: (theme: PresentationTheme) => void
+  fullscreenMode: boolean
+  setFullscreenMode: (fullscreen: boolean) => void
+
+  // Active Drag State for DragOverlay
+  activeDragId: string | null
+  setActiveDragId: (id: string | null) => void
 
   // Metadata
   title: string
@@ -137,6 +149,14 @@ export const useTierListStore = create<TierListState>()(
         set({ theme: nextTheme })
       },
 
+      presentationTheme: 'studio',
+      setPresentationTheme: (presentationTheme) => set({ presentationTheme }),
+      fullscreenMode: false,
+      setFullscreenMode: (fullscreenMode) => set({ fullscreenMode }),
+
+      activeDragId: null,
+      setActiveDragId: (activeDragId) => set({ activeDragId }),
+
       title: defaultTemplate.title,
       subtitle: defaultTemplate.subtitle,
       author: defaultTemplate.author,
@@ -237,7 +257,7 @@ export const useTierListStore = create<TierListState>()(
         const newIndex = currentTiers.length + 1
         const randomPreset = COLOR_PRESETS[newIndex % COLOR_PRESETS.length]
         const newTierId = `tier-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 5)}`
-        
+
         const newTier: Tier = {
           id: newTierId,
           title: `Tier ${String.fromCharCode(64 + Math.min(newIndex, 26))}`,
@@ -536,6 +556,7 @@ export const useTierListStore = create<TierListState>()(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         theme: state.theme,
+        presentationTheme: state.presentationTheme,
         title: state.title,
         subtitle: state.subtitle,
         author: state.author,

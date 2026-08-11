@@ -27,7 +27,7 @@ export default function TierRow({
   isFirst,
   isLast,
 }: TierRowProps) {
-  const { ref } = useDroppable({
+  const { ref, isDropTarget } = useDroppable({
     id: tier.id,
   })
 
@@ -45,11 +45,17 @@ export default function TierRow({
     .filter((it): it is NonNullable<typeof it> => Boolean(it))
 
   return (
-    <div className="group/tier flex flex-col md:flex-row min-h-[90px] border-b border-zinc-200 dark:border-zinc-800/80 last:border-b-0 transition-colors bg-white/60 dark:bg-zinc-950/40 hover:bg-zinc-50/80 dark:hover:bg-zinc-900/30">
+    <div
+      className={`group/tier flex flex-col md:flex-row min-h-[90px] border-b border-zinc-200 dark:border-zinc-800/80 last:border-b-0 transition-all duration-200 ${
+        isDropTarget
+          ? 'bg-indigo-50/80 dark:bg-indigo-950/30'
+          : 'bg-white/60 dark:bg-zinc-950/40 hover:bg-zinc-50/80 dark:hover:bg-zinc-900/30'
+      }`}
+    >
       {/* Left Column: Tier Label Header with Popover Trigger */}
       <div
         style={{ backgroundColor: tier.color }}
-        className="w-full md:w-48 lg:w-56 shrink-0 min-h-[70px] md:min-h-[90px] p-3 flex items-center justify-between shadow-inner relative transition-colors"
+        className="w-full md:w-48 lg:w-56 shrink-0 min-h-[70px] md:min-h-[90px] p-3 flex items-center justify-between shadow-inner relative transition-colors select-none"
       >
         <TierSettingsPopover
           tier={tier}
@@ -65,7 +71,7 @@ export default function TierRow({
             <div className="flex items-center gap-1.5">
               <h3
                 style={{ color: tier.textColor || '#ffffff' }}
-                className="font-extrabold text-base md:text-lg tracking-tight line-clamp-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
+                className="font-black text-base md:text-lg tracking-tight line-clamp-2 drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]"
               >
                 {tier.title}
               </h3>
@@ -81,7 +87,7 @@ export default function TierRow({
 
             {/* Item count badge */}
             <div className="mt-1 flex items-center gap-1.5">
-              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-black/30 backdrop-blur-xs text-white/90 border border-white/15 inline-flex items-center gap-1">
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/30 backdrop-blur-xs text-white/90 border border-white/15 inline-flex items-center gap-1">
                 <span>{tierItems.length}</span>
                 <span className="opacity-75">{tierItems.length === 1 ? 'item' : 'items'}</span>
               </span>
@@ -99,7 +105,7 @@ export default function TierRow({
           >
             <button
               type="button"
-              className="p-1.5 rounded-lg bg-black/20 hover:bg-black/40 text-white/90 hover:text-white transition-all backdrop-blur-xs flex items-center justify-center border border-white/10 hover:border-white/30"
+              className="p-1.5 rounded-lg bg-black/20 hover:bg-black/40 text-white/90 hover:text-white transition-all backdrop-blur-xs flex items-center justify-center border border-white/10 hover:border-white/30 active:scale-90"
               title="Tier Settings"
             >
               <HugeiconsIcon icon={ColorsIcon} size={16} />
@@ -111,11 +117,24 @@ export default function TierRow({
       {/* Center / Right: Droppable Tier Drop Zone */}
       <div
         ref={ref}
-        className="flex-1 p-2.5 sm:p-3 min-h-[90px] flex flex-wrap gap-2.5 items-center content-center bg-zinc-50/50 dark:bg-zinc-900/60 transition-colors duration-200"
+        style={{
+          boxShadow: isDropTarget ? `inset 0 0 0 2px ${tier.color}, inset 0 0 20px ${tier.color}25` : undefined,
+        }}
+        className={`flex-1 p-2.5 sm:p-3 min-h-[90px] flex flex-wrap gap-2.5 items-center content-center transition-all duration-200 ${
+          isDropTarget
+            ? 'bg-zinc-100/90 dark:bg-zinc-900/90 scale-[0.998]'
+            : 'bg-zinc-50/50 dark:bg-zinc-900/60'
+        }`}
       >
         {tierItems.length === 0 ? (
-          <div className="w-full h-full min-h-[60px] flex items-center justify-center border-2 border-dashed border-zinc-300 dark:border-zinc-800/80 rounded-xl p-2 text-zinc-400 dark:text-zinc-600 text-xs font-medium select-none pointer-events-none group-hover/tier:border-zinc-400 dark:group-hover/tier:border-zinc-700/60 transition-colors">
-            Drop items here to rank in {tier.title}
+          <div
+            className={`w-full h-full min-h-[60px] flex items-center justify-center border-2 border-dashed rounded-xl p-2 text-xs font-medium select-none pointer-events-none transition-all duration-200 ${
+              isDropTarget
+                ? 'border-indigo-400 text-indigo-500 bg-indigo-500/10 font-bold scale-[1.01]'
+                : 'border-zinc-300 dark:border-zinc-800/80 text-zinc-400 dark:text-zinc-600 group-hover/tier:border-zinc-400 dark:group-hover/tier:border-zinc-700/60'
+            }`}
+          >
+            {isDropTarget ? `Release to rank in ${tier.title} 🎯` : `Drop items here to rank in ${tier.title}`}
           </div>
         ) : (
           tierItems.map((item) => (
@@ -136,7 +155,7 @@ export default function TierRow({
               type="button"
               disabled={isFirst}
               onClick={() => moveTier(tier.id, 'up')}
-              className="p-1 rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-800 disabled:opacity-20 disabled:hover:bg-transparent transition-colors"
+              className="p-1 rounded-md text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-800 disabled:opacity-20 disabled:hover:bg-transparent active:scale-90 transition-all"
             >
               <HugeiconsIcon icon={ArrowUp01Icon} size={16} />
             </button>
@@ -147,7 +166,7 @@ export default function TierRow({
               type="button"
               disabled={isLast}
               onClick={() => moveTier(tier.id, 'down')}
-              className="p-1 rounded text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-800 disabled:opacity-20 disabled:hover:bg-transparent transition-colors"
+              className="p-1 rounded-md text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-800 disabled:opacity-20 disabled:hover:bg-transparent active:scale-90 transition-all"
             >
               <HugeiconsIcon icon={ArrowDown01Icon} size={16} />
             </button>
@@ -158,7 +177,7 @@ export default function TierRow({
               type="button"
               onClick={() => clearTier(tier.id)}
               disabled={tierItems.length === 0}
-              className="p-1 rounded text-amber-500 dark:text-amber-400 hover:text-amber-600 dark:hover:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 disabled:opacity-20 disabled:hover:bg-transparent transition-colors"
+              className="p-1 rounded-md text-amber-500 dark:text-amber-400 hover:text-amber-600 dark:hover:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-950/40 disabled:opacity-20 disabled:hover:bg-transparent active:scale-90 transition-all"
             >
               <HugeiconsIcon icon={RotateLeft01Icon} size={14} />
             </button>
@@ -168,7 +187,7 @@ export default function TierRow({
             <button
               type="button"
               onClick={() => deleteTier(tier.id)}
-              className="p-1 rounded text-rose-500 dark:text-rose-400 hover:text-rose-600 dark:hover:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 transition-colors"
+              className="p-1 rounded-md text-rose-500 dark:text-rose-400 hover:text-rose-600 dark:hover:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-950/40 active:scale-90 transition-all"
             >
               <HugeiconsIcon icon={Delete02Icon} size={14} />
             </button>

@@ -9,6 +9,7 @@ import {
   DicesIcon,
   FolderAddIcon,
   Tick02Icon,
+  SparklesIcon,
 } from '@hugeicons/core-free-icons'
 import { useTierListStore } from '../store/useTierListStore'
 import DraggableItem from './DraggableItem'
@@ -18,7 +19,7 @@ import { Input } from './ui/input'
 import { Badge } from './ui/badge'
 
 export default function ItemsList() {
-  const { ref } = useDroppable({
+  const { ref, isDropTarget } = useDroppable({
     id: 'POOL',
   })
 
@@ -33,9 +34,13 @@ export default function ItemsList() {
     resetAllToPool,
     setAddItemOpen,
     setRandomPickerOpen,
+    previewMode,
   } = useTierListStore()
 
   const poolItemIds = containers['POOL'] || []
+  const totalItems = items.length
+  const rankedCount = totalItems - poolItemIds.length
+  const percentRanked = totalItems > 0 ? Math.round((rankedCount / totalItems) * 100) : 0
 
   // Extract unique categories from items
   const categories = useMemo(() => {
@@ -61,6 +66,8 @@ export default function ItemsList() {
       })
   }, [poolItemIds, items, searchQuery, selectedCategory])
 
+  if (previewMode) return null
+
   return (
     <div className="w-full max-w-7xl mx-auto mt-6">
       <div className="bg-white dark:bg-zinc-950/90 border border-zinc-200 dark:border-zinc-800/90 rounded-2xl p-4 sm:p-5 shadow-xl dark:shadow-2xl backdrop-blur-xl space-y-4 transition-colors">
@@ -80,7 +87,7 @@ export default function ItemsList() {
                 </Badge>
               </div>
               <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
-                Drag any item to rank it onto the board, or use the quick move menu.
+                Drag any item to rank it onto the board, or click the 3-dots to quick-assign.
               </p>
             </div>
           </div>
@@ -93,7 +100,7 @@ export default function ItemsList() {
                 size="sm"
                 onClick={() => setRandomPickerOpen(true)}
                 disabled={poolItemIds.length === 0}
-                className="bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold gap-1.5 shadow-md shadow-indigo-500/20"
+                className="bg-linear-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold gap-1.5 shadow-md shadow-indigo-500/20 active:scale-95 transition-transform"
               >
                 <HugeiconsIcon icon={DicesIcon} size={16} />
                 <span>Streamer Roulette</span>
@@ -101,14 +108,14 @@ export default function ItemsList() {
             </SimpleTooltip>
 
             {/* Add Custom Item Modal Trigger */}
-            <SimpleTooltip content="Add custom single item or bulk items" shortcut="N" side="top">
+            <SimpleTooltip content="Add custom item, search open-source images, or bulk add" shortcut="N" side="top">
               <Button
                 size="sm"
                 onClick={() => setAddItemOpen(true)}
-                className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold gap-1.5 shadow-md shadow-indigo-600/20"
+                className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold gap-1.5 shadow-md shadow-indigo-600/20 active:scale-95 transition-transform"
               >
                 <HugeiconsIcon icon={PlusSignIcon} size={16} />
-                <span>Add Custom Item</span>
+                <span>Add Item</span>
               </Button>
             </SimpleTooltip>
 
@@ -119,7 +126,7 @@ export default function ItemsList() {
                 size="sm"
                 onClick={shufflePool}
                 disabled={poolItemIds.length <= 1}
-                className="bg-zinc-100 dark:bg-zinc-900 border-zinc-300 dark:border-zinc-800 px-2.5"
+                className="bg-zinc-100 dark:bg-zinc-900 border-zinc-300 dark:border-zinc-800 px-2.5 active:scale-95"
               >
                 <HugeiconsIcon icon={ShuffleIcon} size={16} />
               </Button>
@@ -131,7 +138,7 @@ export default function ItemsList() {
                 variant="outline"
                 size="sm"
                 onClick={resetAllToPool}
-                className="bg-zinc-100 dark:bg-zinc-900 border-zinc-300 dark:border-zinc-800 text-amber-600 dark:text-amber-400 gap-1.5"
+                className="bg-zinc-100 dark:bg-zinc-900 border-zinc-300 dark:border-zinc-800 text-amber-600 dark:text-amber-400 gap-1.5 active:scale-95"
               >
                 <HugeiconsIcon icon={RotateLeft01Icon} size={14} />
                 <span className="hidden sm:inline">Reset Board</span>
@@ -140,8 +147,27 @@ export default function ItemsList() {
           </div>
         </div>
 
+        {/* Live Progress Bar */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+            <span className="flex items-center gap-1">
+              <HugeiconsIcon icon={SparklesIcon} size={13} className="text-indigo-500" />
+              Ranking Progress
+            </span>
+            <span className="font-mono font-bold text-zinc-800 dark:text-zinc-200">
+              {rankedCount} of {totalItems} items ({percentRanked}%)
+            </span>
+          </div>
+          <div className="w-full h-2 rounded-full bg-zinc-100 dark:bg-zinc-900 overflow-hidden border border-zinc-200 dark:border-zinc-800">
+            <div
+              style={{ width: `${percentRanked}%` }}
+              className="h-full bg-linear-to-r from-indigo-500 via-purple-500 to-emerald-500 rounded-full transition-all duration-500 ease-out"
+            />
+          </div>
+        </div>
+
         {/* Filter and Search Bar */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 pt-1">
           {/* Search Box */}
           <div className="relative flex-1 max-w-sm">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500">
@@ -162,7 +188,7 @@ export default function ItemsList() {
               <button
                 type="button"
                 onClick={() => setSelectedCategory(null)}
-                className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all ${
+                className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all active:scale-95 ${
                   selectedCategory === null
                     ? 'bg-zinc-900 dark:bg-zinc-200 text-white dark:text-black'
                     : 'bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 border border-zinc-200 dark:border-zinc-800'
@@ -182,7 +208,7 @@ export default function ItemsList() {
                     onClick={() =>
                       setSelectedCategory(selectedCategory === cat ? null : cat)
                     }
-                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all ${
+                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-lg transition-all active:scale-95 ${
                       selectedCategory === cat
                         ? 'bg-indigo-600 text-white'
                         : 'bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 border border-zinc-200 dark:border-zinc-800'
@@ -199,7 +225,11 @@ export default function ItemsList() {
         {/* Draggable Drop Zone Area */}
         <div
           ref={ref}
-          className="min-h-[140px] p-3 sm:p-4 rounded-xl bg-zinc-50/50 dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800/80 flex flex-wrap gap-2.5 items-center content-start transition-all"
+          className={`min-h-[140px] p-3 sm:p-4 rounded-xl border flex flex-wrap gap-2.5 items-center content-start transition-all duration-200 ${
+            isDropTarget
+              ? 'bg-indigo-50/80 dark:bg-indigo-950/30 border-indigo-400 ring-2 ring-indigo-500/20'
+              : 'bg-zinc-50/50 dark:bg-zinc-900/50 border-zinc-200 dark:border-zinc-800/80'
+          }`}
         >
           {poolItemIds.length === 0 ? (
             <div className="w-full py-10 flex flex-col items-center justify-center text-center space-y-2">
@@ -216,7 +246,7 @@ export default function ItemsList() {
                 variant="outline"
                 size="sm"
                 onClick={() => setAddItemOpen(true)}
-                className="mt-2 text-xs font-semibold"
+                className="mt-2 text-xs font-semibold active:scale-95"
               >
                 + Add Another Item
               </Button>
