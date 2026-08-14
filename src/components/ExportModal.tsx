@@ -44,6 +44,8 @@ export default function ExportModal() {
   const [jsonInput, setJsonInput] = useState('')
   const [jsonSuccess, setJsonSuccess] = useState(false)
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
   const triggerConfetti = () => {
     confetti({
       particleCount: 70,
@@ -58,6 +60,7 @@ export default function ExportModal() {
     const node = document.getElementById('tier-list-canvas')
     if (!node) return
 
+    setErrorMessage(null)
     try {
       setIsExporting(true)
       const dataUrl = await toPng(node, {
@@ -80,7 +83,7 @@ export default function ExportModal() {
       setIsExporting(false)
     } catch (err) {
       console.error('Failed to export PNG', err)
-      alert('Failed to generate PNG image. Please try again.')
+      setErrorMessage('Failed to generate PNG image. Please try again.')
       setIsExporting(false)
     }
   }
@@ -90,6 +93,7 @@ export default function ExportModal() {
     const node = document.getElementById('tier-list-canvas')
     if (!node) return
 
+    setErrorMessage(null)
     try {
       setIsExporting(true)
       const blob = await toBlob(node, {
@@ -106,12 +110,12 @@ export default function ExportModal() {
         triggerConfetti()
         setTimeout(() => setCopied(false), 3000)
       } else {
-        alert('Clipboard image copy not supported in this browser. Please download PNG instead.')
+        setErrorMessage('Clipboard image copy not supported in this browser. Please download PNG instead.')
       }
       setIsExporting(false)
     } catch (err) {
       console.error('Failed to copy image to clipboard', err)
-      alert('Could not copy image to clipboard.')
+      setErrorMessage('Could not copy image to clipboard.')
       setIsExporting(false)
     }
   }
@@ -144,6 +148,7 @@ export default function ExportModal() {
   // Import JSON configuration
   const handleImportJson = (e: React.FormEvent) => {
     e.preventDefault()
+    setErrorMessage(null)
     try {
       const parsed = JSON.parse(jsonInput)
       if (parsed.tiers && parsed.items && parsed.containers) {
@@ -155,10 +160,10 @@ export default function ExportModal() {
           setExportOpen(false)
         }, 1500)
       } else {
-        alert('Invalid tier list JSON structure.')
+        setErrorMessage('Invalid tier list JSON structure: missing tiers, items, or containers.')
       }
     } catch {
-      alert('Invalid JSON format.')
+      setErrorMessage('Invalid JSON syntax: please check formatting.')
     }
   }
 
@@ -180,6 +185,12 @@ export default function ExportModal() {
             </div>
           </div>
         </DialogHeader>
+
+        {errorMessage && (
+          <div className="p-2.5 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-xs font-medium">
+            {errorMessage}
+          </div>
+        )}
 
         {/* Tab switcher */}
         <Tabs

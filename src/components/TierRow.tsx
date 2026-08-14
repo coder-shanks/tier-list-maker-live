@@ -11,6 +11,7 @@ import {
 import type { Tier } from '../lib/types'
 import { useUiStore } from '../store/useUiStore'
 import { useTierDataStore } from '../store/useTierDataStore'
+import { useBlindStore } from '../store/useBlindStore'
 import DraggableItem from './DraggableItem'
 import TierSettingsPopover from './TierSettingsPopover'
 import { SimpleTooltip } from './ui/tooltip'
@@ -28,8 +29,13 @@ export default function TierRow({
   isFirst,
   isLast,
 }: TierRowProps) {
+  const isBlindActive = useBlindStore((s) => s.isActive)
+  const blindMode = useBlindStore((s) => s.mode)
+  const tierCap = useBlindStore((s) => s.tierCaps[tier.id])
+
   const { ref, isDropTarget } = useDroppable({
     id: tier.id,
+    disabled: isBlindActive && blindMode === 'hardcore' && tierCap !== undefined && itemIds.length >= tierCap,
   })
 
   const items = useTierDataStore((s) => s.items)
@@ -43,6 +49,8 @@ export default function TierRow({
   const tierItems = itemIds
     .map((id) => items.find((it) => it.id === id))
     .filter((it): it is NonNullable<typeof it> => Boolean(it))
+
+  const isHardcoreFull = isBlindActive && blindMode === 'hardcore' && tierCap !== undefined && tierItems.length >= tierCap
 
   return (
     <div
@@ -85,18 +93,26 @@ export default function TierRow({
               )}
             </div>
 
-            {/* Item count chip */}
+            {/* Item count / capacity chip */}
             <div className="mt-0.5 flex items-center gap-1">
               <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-black/25 backdrop-blur-xs text-white/90 border border-white/10 inline-flex items-center gap-1">
-                <span>{tierItems.length}</span>
-                <span className="opacity-75">{tierItems.length === 1 ? 'item' : 'items'}</span>
+                {isBlindActive && blindMode === 'hardcore' && tierCap !== undefined ? (
+                  <span className={isHardcoreFull ? 'text-amber-300 font-bold' : ''}>
+                    {tierItems.length}/{tierCap} {isHardcoreFull ? 'FULL' : 'slots'}
+                  </span>
+                ) : (
+                  <>
+                    <span>{tierItems.length}</span>
+                    <span className="opacity-75">{tierItems.length === 1 ? 'item' : 'items'}</span>
+                  </>
+                )}
               </span>
             </div>
           </button>
         </TierSettingsPopover>
 
         {/* Tier Settings Color Icon Trigger */}
-        {!previewMode && (
+        {!previewMode && !isBlindActive && (
           <TierSettingsPopover
             tier={tier}
             isFirst={isFirst}
@@ -129,12 +145,18 @@ export default function TierRow({
         {tierItems.length === 0 ? (
           <div
             className={`w-full h-full min-h-[56px] flex items-center justify-center border border-dashed rounded-lg p-2 text-xs font-mono font-medium select-none pointer-events-none transition-all duration-150 ${
-              isDropTarget
+              isHardcoreFull
+                ? 'border-destructive/60 text-destructive bg-destructive/10 font-bold'
+                : isDropTarget
                 ? 'border-rose-500 text-rose-500 bg-rose-500/10 font-bold'
                 : 'border-border/70 text-muted-foreground/60 group-hover/tier:text-muted-foreground'
             }`}
           >
-            {isDropTarget ? `Drop into ${tier.title}` : `Drop items here`}
+            {isHardcoreFull
+              ? `⚠️ Tier is FULL (max ${tierCap})`
+              : isDropTarget
+              ? `Drop into ${tier.title}`
+              : `Drop items here`}
           </div>
         ) : (
           tierItems.map((item) => (
@@ -147,8 +169,8 @@ export default function TierRow({
         )}
       </div>
 
-      {/* Right Action Rail (Desktop only, hidden in preview) */}
-      {!previewMode && (
+      {/* Right Action Rail (Desktop only, hidden in preview & active blind challenge) */}
+      {!previewMode && !isBlindActive && (
         <div className="hidden md:flex flex-col justify-center items-center gap-0.5 p-1 bg-secondary/50 border-l border-border shrink-0 w-10 opacity-40 group-hover/tier:opacity-100 transition-opacity">
           <SimpleTooltip content="Move Tier Up" side="left">
             <button

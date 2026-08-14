@@ -8,6 +8,7 @@ import {
 import { move } from "@dnd-kit/helpers";
 import { useUiStore } from "./store/useUiStore";
 import { useTierDataStore } from "./store/useTierDataStore";
+import { useBlindStore } from "./store/useBlindStore";
 import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
 import Navbar from "./components/Navbar";
 import TierList from "./components/TierList";
@@ -16,6 +17,8 @@ import AddItemModal from "./components/AddItemModal";
 import ExportModal from "./components/ExportModal";
 import TemplateSelectorModal from "./components/TemplateSelectorModal";
 import RandomPickerModal from "./components/RandomPickerModal";
+import BlindChallengeSetupModal from "./components/BlindChallengeSetupModal";
+import BlindChallengeSummaryModal from "./components/BlindChallengeSummaryModal";
 import FullscreenView from "./components/FullscreenView";
 import DraggableItem from "./components/DraggableItem";
 import Footer from "./components/Footer";
@@ -58,6 +61,46 @@ export default function App() {
     (event: DragEndEvent) => {
       setActiveDragId(null);
       if (event.canceled) return;
+
+      const isBlindActive = useBlindStore.getState().isActive;
+      const currentItemId = useBlindStore.getState().currentItemId;
+      const lockedItemIds = useBlindStore.getState().lockedItemIds;
+
+      const sourceId = event.operation?.source?.id as string | undefined;
+      const targetId = event.operation?.target?.id as string | undefined;
+
+      // Handle Blind Challenge spotlight card drop
+      if (isBlindActive && currentItemId && sourceId === currentItemId) {
+        const { containers: currentContainers, tiers } = useTierDataStore.getState();
+        
+        let resolvedTierId: string | null = null;
+        if (targetId && targetId !== "POOL") {
+          if (tiers.some((t) => t.id === targetId)) {
+            resolvedTierId = targetId;
+          } else {
+            // Find container containing the target item
+            for (const [tierId, itemIds] of Object.entries(currentContainers)) {
+              if (tierId !== "POOL" && itemIds.includes(targetId)) {
+                resolvedTierId = tierId;
+                break;
+              }
+            }
+          }
+        }
+
+        if (resolvedTierId) {
+          const assigned = useBlindStore.getState().assignBlindCurrentItem(resolvedTierId);
+          if (assigned) return;
+        }
+        // Dropped outside or into full/invalid tier - do not mutate board
+        return;
+      }
+
+      // If in blind mode, do not allow moving locked items
+      if (isBlindActive && sourceId && lockedItemIds.includes(sourceId)) {
+        return;
+      }
+
       setContainers((prevContainers) => move(prevContainers, event));
     },
     [setActiveDragId, setContainers],
@@ -101,6 +144,8 @@ export default function App() {
           <ExportModal />
           <TemplateSelectorModal />
           <RandomPickerModal />
+          <BlindChallengeSetupModal />
+          <BlindChallengeSummaryModal />
         </div>
       </DragDropProvider>
     </TooltipProvider>

@@ -105,11 +105,14 @@ export default function AddItemModal() {
     setAddItemOpen(false)
   }
 
+  const [uploadError, setUploadError] = useState<string | null>(null)
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
+    setUploadError(null)
     if (file) {
       if (!file.type.startsWith('image/')) {
-        alert('Please select a valid image file.')
+        setUploadError('Please select a valid image file (PNG, JPEG, WebP, etc.).')
         return
       }
       const reader = new FileReader()
@@ -117,6 +120,7 @@ export default function AddItemModal() {
         if (event.target?.result) {
           setImageUrl(event.target.result as string)
           setPreviewError(false)
+          setUploadError(null)
         }
       }
       reader.readAsDataURL(file)
@@ -362,6 +366,9 @@ export default function AddItemModal() {
                           <span>Upload</span>
                         </Button>
                       </div>
+                      {uploadError && (
+                        <p className="text-[11px] text-destructive font-medium">{uploadError}</p>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">

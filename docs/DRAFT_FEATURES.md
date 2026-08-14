@@ -136,5 +136,5 @@ graph TD
 ## 📋 Implementation Checklist
 
 - [ ] **Phase 1: Media Search Integration** (Unsplash & Giphy tabs in `AddItemModal`)
-- [ ] **Phase 2: Blind Ranking Challenge Mode** (Game loop & locked card state in `useTierListStore`)
+- [x] **Phase 2: Blind Ranking Challenge Mode** (Game loop & locked card state in `useBlindStore`)
 - [ ] **Phase 3: Realtime Backend & Audience Voting** (Supabase Realtime / Partykit setup & vote synchronization)

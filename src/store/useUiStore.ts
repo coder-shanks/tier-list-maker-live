@@ -36,11 +36,15 @@ export interface UiState {
   isTemplateOpen: boolean
   isRandomPickerOpen: boolean
   isEditMetadataOpen: boolean
+  isBlindSetupOpen: boolean
+  isBlindSummaryOpen: boolean
   setAddItemOpen: (open: boolean) => void
   setExportOpen: (open: boolean) => void
   setTemplateOpen: (open: boolean) => void
   setRandomPickerOpen: (open: boolean) => void
   setEditMetadataOpen: (open: boolean) => void
+  setBlindSetupOpen: (open: boolean) => void
+  setBlindSummaryOpen: (open: boolean) => void
 }
 
 function applyThemeToDocument(theme: 'dark' | 'light') {
@@ -92,12 +96,28 @@ export const useUiStore = create<UiState>()(
       isTemplateOpen: false,
       isRandomPickerOpen: false,
       isEditMetadataOpen: false,
+      isBlindSetupOpen: false,
+      isBlindSummaryOpen: false,
 
       setAddItemOpen: (open) => set({ isAddItemOpen: open }),
       setExportOpen: (open) => set({ isExportOpen: open }),
       setTemplateOpen: (open) => set({ isTemplateOpen: open }),
-      setRandomPickerOpen: (open) => set({ isRandomPickerOpen: open }),
+      setRandomPickerOpen: (open) => {
+        if (open) {
+          set({ isRandomPickerOpen: true, isBlindSetupOpen: false, isAddItemOpen: false })
+        } else {
+          set({ isRandomPickerOpen: false })
+        }
+      },
       setEditMetadataOpen: (open) => set({ isEditMetadataOpen: open }),
+      setBlindSetupOpen: (open) => {
+        if (open) {
+          set({ isBlindSetupOpen: true, isRandomPickerOpen: false, isAddItemOpen: false })
+        } else {
+          set({ isBlindSetupOpen: false })
+        }
+      },
+      setBlindSummaryOpen: (open) => set({ isBlindSummaryOpen: open }),
     }),
     {
       name: 'tier-list-ui-storage',

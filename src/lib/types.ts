@@ -48,3 +48,30 @@ export type TierListHistoryState = {
   items: TierItem[]
   containers: TierListContainers
 }
+
+export type BlindChallengeMode = 'standard' | 'hardcore'
+
+export type BlindChallengeHistoryEntry = {
+  itemId: string
+  tierId: string
+  timestamp: number
+}
+
+export type BlindChallengeConfig = {
+  mode: BlindChallengeMode
+  tierCaps: Record<string, number>
+  resetBoardFirst: boolean
+}
+
+export type BlindModeState = {
+  isActive: boolean
+  mode: BlindChallengeMode
+  queue: string[]
+  currentItemId: string | null
+  lockedItemIds: string[]
+  tierCaps: Record<string, number>
+  history: BlindChallengeHistoryEntry[]
+  startedAt: number | null
+  completedAt: number | null
+  totalItems: number
+}

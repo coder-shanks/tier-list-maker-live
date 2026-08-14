@@ -11,6 +11,7 @@ import {
 import type { TierItem } from '../lib/types'
 import { useUiStore } from '../store/useUiStore'
 import { useTierDataStore } from '../store/useTierDataStore'
+import { useBlindStore } from '../store/useBlindStore'
 import {
   Popover,
   PopoverContent,
@@ -32,8 +33,11 @@ export default function DraggableItem({
   isDragging: propIsDragging = false,
   isOverlay = false,
 }: DraggableItemProps) {
+  const isLocked = useBlindStore((s) => s.isActive && s.lockedItemIds.includes(item.id))
+
   const { ref, isDragging: dndIsDragging } = useDraggable({
     id: item.id,
+    disabled: isLocked,
   })
 
   const isDragging = propIsDragging || dndIsDragging
@@ -145,8 +149,17 @@ export default function DraggableItem({
         </div>
       )}
 
-      {/* Quick Action Menu Trigger (Hidden in Preview / Overlay mode) */}
-      {!previewMode && !isOverlay && (
+      {/* Locked in Blind Mode Badge */}
+      {isLocked && !isOverlay && (
+        <div className="absolute top-1 right-1 pointer-events-none z-10">
+          <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-black/85 backdrop-blur-xs text-amber-400 border border-amber-500/30 shadow-xs flex items-center gap-0.5">
+            <span>🔒</span>
+          </span>
+        </div>
+      )}
+
+      {/* Quick Action Menu Trigger (Hidden in Preview / Overlay / Locked mode) */}
+      {!previewMode && !isOverlay && !isLocked && (
         <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
           <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <PopoverTrigger

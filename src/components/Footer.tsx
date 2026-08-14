@@ -38,6 +38,10 @@ export const Footer = memo(function Footer() {
         </span>
         <span>•</span>
         <span className="inline-flex items-center gap-1">
+          <kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground border border-border">B</kbd> Blind Rank
+        </span>
+        <span>•</span>
+        <span className="inline-flex items-center gap-1">
           <kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground border border-border">⌘E</kbd> Export
         </span>
       </div>

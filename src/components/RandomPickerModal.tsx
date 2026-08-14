@@ -8,6 +8,7 @@ import {
 } from '@hugeicons/core-free-icons'
 import { useUiStore } from '../store/useUiStore'
 import { useTierDataStore } from '../store/useTierDataStore'
+import { useBlindStore } from '../store/useBlindStore'
 import type { TierItem } from '../lib/types'
 import {
   Dialog,
@@ -219,11 +220,14 @@ function RandomPickerContent({ onClose }: { onClose: () => void }) {
 }
 
 export default function RandomPickerModal() {
+  const isBlindActive = useBlindStore((s) => s.isActive)
   const isRandomPickerOpen = useUiStore((s) => s.isRandomPickerOpen)
   const setRandomPickerOpen = useUiStore((s) => s.setRandomPickerOpen)
 
+  const effectiveOpen = isRandomPickerOpen && !isBlindActive
+
   return (
-    <Dialog open={isRandomPickerOpen} onOpenChange={setRandomPickerOpen}>
+    <Dialog open={effectiveOpen} onOpenChange={setRandomPickerOpen}>
       <DialogContent className="sm:max-w-md bg-card border-border">
         <DialogHeader>
           <div className="flex items-center gap-2.5">
