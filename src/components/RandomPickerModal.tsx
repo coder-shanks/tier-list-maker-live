@@ -6,7 +6,8 @@ import {
   RotateLeft01Icon,
   SparklesIcon,
 } from '@hugeicons/core-free-icons'
-import { useTierListStore } from '../store/useTierListStore'
+import { useUiStore } from '../store/useUiStore'
+import { useTierDataStore } from '../store/useTierDataStore'
 import type { TierItem } from '../lib/types'
 import {
   Dialog,
@@ -18,7 +19,11 @@ import {
 import { Button } from '@/components/ui/button'
 
 function RandomPickerContent({ onClose }: { onClose: () => void }) {
-  const { items, containers, tiers, moveItemToTier } = useTierListStore()
+  const items = useTierDataStore((s) => s.items)
+  const containers = useTierDataStore((s) => s.containers)
+  const tiers = useTierDataStore((s) => s.tiers)
+  const moveItemToTier = useTierDataStore((s) => s.moveItemToTier)
+
   const poolItemIds = containers['POOL'] || []
   const poolItems = poolItemIds
     .map((id) => items.find((it) => it.id === id))
@@ -214,7 +219,8 @@ function RandomPickerContent({ onClose }: { onClose: () => void }) {
 }
 
 export default function RandomPickerModal() {
-  const { isRandomPickerOpen, setRandomPickerOpen } = useTierListStore()
+  const isRandomPickerOpen = useUiStore((s) => s.isRandomPickerOpen)
+  const setRandomPickerOpen = useUiStore((s) => s.setRandomPickerOpen)
 
   return (
     <Dialog open={isRandomPickerOpen} onOpenChange={setRandomPickerOpen}>

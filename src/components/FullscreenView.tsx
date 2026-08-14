@@ -11,7 +11,8 @@ import {
   MinimizeScreenIcon,
   ColorsIcon,
 } from '@hugeicons/core-free-icons'
-import { useTierListStore, type PresentationTheme } from '../store/useTierListStore'
+import { useUiStore, type PresentationTheme } from '../store/useUiStore'
+import { useTierDataStore } from '../store/useTierDataStore'
 import type { ItemSize } from '../lib/types'
 import { SimpleTooltip } from './ui/tooltip'
 import { Button } from './ui/button'
@@ -19,21 +20,20 @@ import { Badge } from './ui/badge'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 
 export default function FullscreenView() {
-  const {
-    fullscreenMode,
-    setFullscreenMode,
-    previewMode,
-    setPreviewMode,
-    theme,
-    toggleTheme,
-    presentationTheme,
-    setPresentationTheme,
-    itemSize,
-    setItemSize,
-    setExportOpen,
-    items,
-    containers,
-  } = useTierListStore()
+  const fullscreenMode = useUiStore((s) => s.fullscreenMode)
+  const setFullscreenMode = useUiStore((s) => s.setFullscreenMode)
+  const previewMode = useUiStore((s) => s.previewMode)
+  const setPreviewMode = useUiStore((s) => s.setPreviewMode)
+  const theme = useUiStore((s) => s.theme)
+  const toggleTheme = useUiStore((s) => s.toggleTheme)
+  const presentationTheme = useUiStore((s) => s.presentationTheme)
+  const setPresentationTheme = useUiStore((s) => s.setPresentationTheme)
+  const itemSize = useUiStore((s) => s.itemSize)
+  const setItemSize = useUiStore((s) => s.setItemSize)
+  const setExportOpen = useUiStore((s) => s.setExportOpen)
+
+  const items = useTierDataStore((s) => s.items)
+  const containers = useTierDataStore((s) => s.containers)
 
   // Track browser native fullscreen state and sync with preview mode
   useEffect(() => {

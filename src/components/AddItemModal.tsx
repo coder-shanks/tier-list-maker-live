@@ -9,7 +9,8 @@ import {
   Search01Icon,
   Globe02Icon,
 } from '@hugeicons/core-free-icons'
-import { useTierListStore } from '../store/useTierListStore'
+import { useUiStore } from '../store/useUiStore'
+import { useTierDataStore } from '../store/useTierDataStore'
 import { searchOpenSourceImages, type ImageSearchResult } from '../lib/imageService'
 import {
   Dialog,
@@ -24,13 +25,12 @@ import { Input } from '@/components/ui/input'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 
 export default function AddItemModal() {
-  const {
-    isAddItemOpen,
-    setAddItemOpen,
-    addItem,
-    bulkAddItems,
-    tiers,
-  } = useTierListStore()
+  const isAddItemOpen = useUiStore((s) => s.isAddItemOpen)
+  const setAddItemOpen = useUiStore((s) => s.setAddItemOpen)
+
+  const tiers = useTierDataStore((s) => s.tiers)
+  const addItem = useTierDataStore((s) => s.addItem)
+  const bulkAddItems = useTierDataStore((s) => s.bulkAddItems)
 
   const [activeTab, setActiveTab] = useState<'search' | 'single' | 'bulk'>('search')
 

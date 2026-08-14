@@ -1,5 +1,7 @@
 import { useState, useMemo } from 'react'
-import { useTierListStore } from '../store/useTierListStore'
+import { useUiStore } from '../store/useUiStore'
+import { useMetadataStore } from '../store/useMetadataStore'
+import { useTierDataStore } from '../store/useTierDataStore'
 import { TEMPLATES } from '../lib/constants'
 import { HugeiconsIcon } from '@hugeicons/react'
 import {
@@ -19,12 +21,11 @@ import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 
 export default function TemplateSelectorModal() {
-  const {
-    isTemplateOpen,
-    setTemplateOpen,
-    selectedTemplateId,
-    loadTemplate,
-  } = useTierListStore()
+  const isTemplateOpen = useUiStore((s) => s.isTemplateOpen)
+  const setTemplateOpen = useUiStore((s) => s.setTemplateOpen)
+
+  const selectedTemplateId = useMetadataStore((s) => s.selectedTemplateId)
+  const loadTemplate = useTierDataStore((s) => s.loadTemplate)
 
   const [search, setSearch] = useState('')
   const [selectedCat, setSelectedCat] = useState<string | null>(null)

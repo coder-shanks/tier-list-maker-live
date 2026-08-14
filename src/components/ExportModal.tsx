@@ -11,7 +11,9 @@ import {
   SparklesIcon,
   Image01Icon,
 } from '@hugeicons/core-free-icons'
-import { useTierListStore } from '../store/useTierListStore'
+import { useUiStore } from '../store/useUiStore'
+import { useMetadataStore } from '../store/useMetadataStore'
+import { useTierDataStore } from '../store/useTierDataStore'
 import {
   Dialog,
   DialogContent,
@@ -23,18 +25,18 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 
 export default function ExportModal() {
-  const {
-    isExportOpen,
-    setExportOpen,
-    theme,
-    title,
-    subtitle,
-    author,
-    tiers,
-    items,
-    containers,
-    importConfig,
-  } = useTierListStore()
+  const isExportOpen = useUiStore((s) => s.isExportOpen)
+  const setExportOpen = useUiStore((s) => s.setExportOpen)
+  const theme = useUiStore((s) => s.theme)
+
+  const title = useMetadataStore((s) => s.title)
+  const subtitle = useMetadataStore((s) => s.subtitle)
+  const author = useMetadataStore((s) => s.author)
+
+  const tiers = useTierDataStore((s) => s.tiers)
+  const items = useTierDataStore((s) => s.items)
+  const containers = useTierDataStore((s) => s.containers)
+  const importConfig = useTierDataStore((s) => s.importConfig)
 
   const [isExporting, setIsExporting] = useState(false)
   const [copied, setCopied] = useState(false)

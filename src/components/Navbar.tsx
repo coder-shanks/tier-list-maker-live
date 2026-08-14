@@ -11,32 +11,33 @@ import {
   FullScreenIcon,
   MinimizeScreenIcon,
 } from '@hugeicons/core-free-icons'
-import { useTierListStore } from '../store/useTierListStore'
+import { useUiStore } from '../store/useUiStore'
+import { useMetadataStore } from '../store/useMetadataStore'
+import { useTierDataStore, performUndo, performRedo } from '../store/useTierDataStore'
+import { useHistoryStore } from '../store/useHistoryStore'
 import { TEMPLATES } from '../lib/constants'
 import type { ItemSize } from '../lib/types'
 import { SimpleTooltip } from './ui/tooltip'
 import { Button } from './ui/button'
 
 export default function Navbar() {
-  const {
-    selectedTemplateId,
-    itemSize,
-    previewMode,
-    fullscreenMode,
-    setFullscreenMode,
-    theme,
-    toggleTheme,
-    canUndo,
-    canRedo,
-    undo,
-    redo,
-    tiers,
-    containers,
-    setItemSize,
-    setPreviewMode,
-    setTemplateOpen,
-    setExportOpen,
-  } = useTierListStore()
+  const selectedTemplateId = useMetadataStore((s) => s.selectedTemplateId)
+  const itemSize = useUiStore((s) => s.itemSize)
+  const setItemSize = useUiStore((s) => s.setItemSize)
+  const previewMode = useUiStore((s) => s.previewMode)
+  const setPreviewMode = useUiStore((s) => s.setPreviewMode)
+  const fullscreenMode = useUiStore((s) => s.fullscreenMode)
+  const setFullscreenMode = useUiStore((s) => s.setFullscreenMode)
+  const theme = useUiStore((s) => s.theme)
+  const toggleTheme = useUiStore((s) => s.toggleTheme)
+  const setTemplateOpen = useUiStore((s) => s.setTemplateOpen)
+  const setExportOpen = useUiStore((s) => s.setExportOpen)
+
+  const canUndo = useHistoryStore((s) => s.canUndo())
+  const canRedo = useHistoryStore((s) => s.canRedo())
+
+  const tiers = useTierDataStore((s) => s.tiers)
+  const containers = useTierDataStore((s) => s.containers)
 
   const currentTemplate =
     TEMPLATES.find((t) => t.id === selectedTemplateId) || TEMPLATES[0]
@@ -170,8 +171,8 @@ export default function Navbar() {
             <SimpleTooltip content="Undo (⌘Z)" side="bottom">
               <button
                 type="button"
-                onClick={undo}
-                disabled={!canUndo()}
+                onClick={performUndo}
+                disabled={!canUndo}
                 className="p-1.5 rounded text-muted-foreground hover:text-foreground hover:bg-background disabled:opacity-20 disabled:hover:bg-transparent transition-all active:scale-95"
               >
                 <HugeiconsIcon icon={Undo02Icon} size={15} />
@@ -180,8 +181,8 @@ export default function Navbar() {
             <SimpleTooltip content="Redo (⌘Y / ⇧⌘Z)" side="bottom">
               <button
                 type="button"
-                onClick={redo}
-                disabled={!canRedo()}
+                onClick={performRedo}
+                disabled={!canRedo}
                 className="p-1.5 rounded text-muted-foreground hover:text-foreground hover:bg-background disabled:opacity-20 disabled:hover:bg-transparent transition-all active:scale-95"
               >
                 <HugeiconsIcon icon={Redo02Icon} size={15} />

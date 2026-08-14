@@ -11,10 +11,15 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Edit02Icon } from '@hugeicons/core-free-icons'
-import { useTierListStore } from '../store/useTierListStore'
+import { useUiStore } from '../store/useUiStore'
+import { useMetadataStore } from '../store/useMetadataStore'
 
 function EditMetadataForm({ onClose }: { onClose: () => void }) {
-  const { title, subtitle, author, updateMetadata } = useTierListStore()
+  const title = useMetadataStore((s) => s.title)
+  const subtitle = useMetadataStore((s) => s.subtitle)
+  const author = useMetadataStore((s) => s.author)
+  const updateMetadata = useMetadataStore((s) => s.updateMetadata)
+
   const [localTitle, setLocalTitle] = useState(title)
   const [localSubtitle, setLocalSubtitle] = useState(subtitle)
   const [localAuthor, setLocalAuthor] = useState(author)
@@ -90,7 +95,8 @@ function EditMetadataForm({ onClose }: { onClose: () => void }) {
 }
 
 export default function EditMetadataModal() {
-  const { isEditMetadataOpen, setEditMetadataOpen } = useTierListStore()
+  const isEditMetadataOpen = useUiStore((s) => s.isEditMetadataOpen)
+  const setEditMetadataOpen = useUiStore((s) => s.setEditMetadataOpen)
 
   return (
     <Dialog open={isEditMetadataOpen} onOpenChange={setEditMetadataOpen}>

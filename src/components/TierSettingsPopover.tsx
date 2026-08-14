@@ -16,7 +16,7 @@ import {
 } from '@hugeicons/core-free-icons'
 import { COLOR_PRESETS } from '../lib/constants'
 import type { Tier } from '../lib/types'
-import { useTierListStore } from '../store/useTierListStore'
+import { useTierDataStore } from '../store/useTierDataStore'
 
 type TierSettingsPopoverProps = {
   tier: Tier
@@ -37,12 +37,10 @@ export default function TierSettingsPopover({
   const [title, setTitle] = useState(tier.title)
   const [customHex, setCustomHex] = useState(tier.color)
 
-  const {
-    updateTier,
-    deleteTier,
-    moveTier,
-    clearTier,
-  } = useTierListStore()
+  const updateTier = useTierDataStore((s) => s.updateTier)
+  const deleteTier = useTierDataStore((s) => s.deleteTier)
+  const moveTier = useTierDataStore((s) => s.moveTier)
+  const clearTier = useTierDataStore((s) => s.clearTier)
 
   const handleSaveTitle = (e: React.FormEvent) => {
     e.preventDefault()

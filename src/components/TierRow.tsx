@@ -9,7 +9,8 @@ import {
   ColorsIcon,
 } from '@hugeicons/core-free-icons'
 import type { Tier } from '../lib/types'
-import { useTierListStore } from '../store/useTierListStore'
+import { useUiStore } from '../store/useUiStore'
+import { useTierDataStore } from '../store/useTierDataStore'
 import DraggableItem from './DraggableItem'
 import TierSettingsPopover from './TierSettingsPopover'
 import { SimpleTooltip } from './ui/tooltip'
@@ -31,13 +32,12 @@ export default function TierRow({
     id: tier.id,
   })
 
-  const {
-    items,
-    deleteTier,
-    moveTier,
-    clearTier,
-    previewMode,
-  } = useTierListStore()
+  const items = useTierDataStore((s) => s.items)
+  const deleteTier = useTierDataStore((s) => s.deleteTier)
+  const moveTier = useTierDataStore((s) => s.moveTier)
+  const clearTier = useTierDataStore((s) => s.clearTier)
+
+  const previewMode = useUiStore((s) => s.previewMode)
 
   // Find item objects for all IDs in this tier
   const tierItems = itemIds

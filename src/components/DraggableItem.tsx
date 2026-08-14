@@ -9,7 +9,8 @@ import {
   Tick02Icon,
 } from '@hugeicons/core-free-icons'
 import type { TierItem } from '../lib/types'
-import { useTierListStore } from '../store/useTierListStore'
+import { useUiStore } from '../store/useUiStore'
+import { useTierDataStore } from '../store/useTierDataStore'
 import {
   Popover,
   PopoverContent,
@@ -42,14 +43,13 @@ export default function DraggableItem({
   const [editTitle, setEditTitle] = useState(item.title)
   const [editCategory, setEditCategory] = useState(item.category || 'Custom')
 
-  const {
-    itemSize,
-    tiers,
-    moveItemToTier,
-    deleteItem,
-    updateItem,
-    previewMode,
-  } = useTierListStore()
+  const itemSize = useUiStore((s) => s.itemSize)
+  const previewMode = useUiStore((s) => s.previewMode)
+
+  const tiers = useTierDataStore((s) => s.tiers)
+  const moveItemToTier = useTierDataStore((s) => s.moveItemToTier)
+  const deleteItem = useTierDataStore((s) => s.deleteItem)
+  const updateItem = useTierDataStore((s) => s.updateItem)
 
   // Deterministic subtle dark surface color for items without image
   const getMonogramBg = (name: string) => {

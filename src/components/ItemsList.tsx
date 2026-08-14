@@ -11,7 +11,8 @@ import {
   Tick02Icon,
   SparklesIcon,
 } from '@hugeicons/core-free-icons'
-import { useTierListStore } from '../store/useTierListStore'
+import { useUiStore } from '../store/useUiStore'
+import { useTierDataStore } from '../store/useTierDataStore'
 import DraggableItem from './DraggableItem'
 import { SimpleTooltip } from './ui/tooltip'
 import { Button } from './ui/button'
@@ -23,19 +24,18 @@ export default function ItemsList() {
     id: 'POOL',
   })
 
-  const {
-    items,
-    containers,
-    searchQuery,
-    selectedCategory,
-    setSearchQuery,
-    setSelectedCategory,
-    shufflePool,
-    resetAllToPool,
-    setAddItemOpen,
-    setRandomPickerOpen,
-    previewMode,
-  } = useTierListStore()
+  const searchQuery = useUiStore((s) => s.searchQuery)
+  const selectedCategory = useUiStore((s) => s.selectedCategory)
+  const setSearchQuery = useUiStore((s) => s.setSearchQuery)
+  const setSelectedCategory = useUiStore((s) => s.setSelectedCategory)
+  const setAddItemOpen = useUiStore((s) => s.setAddItemOpen)
+  const setRandomPickerOpen = useUiStore((s) => s.setRandomPickerOpen)
+  const previewMode = useUiStore((s) => s.previewMode)
+
+  const items = useTierDataStore((s) => s.items)
+  const containers = useTierDataStore((s) => s.containers)
+  const shufflePool = useTierDataStore((s) => s.shufflePool)
+  const resetAllToPool = useTierDataStore((s) => s.resetAllToPool)
 
   const poolItemIds = useMemo(() => containers['POOL'] || [], [containers])
   const totalItems = items.length

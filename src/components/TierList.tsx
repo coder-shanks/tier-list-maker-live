@@ -8,7 +8,9 @@ import {
   SparklesIcon,
   FolderAddIcon,
 } from '@hugeicons/core-free-icons'
-import { useTierListStore } from '../store/useTierListStore'
+import { useUiStore } from '../store/useUiStore'
+import { useMetadataStore } from '../store/useMetadataStore'
+import { useTierDataStore } from '../store/useTierDataStore'
 import TierRow from './TierRow'
 import { SimpleTooltip } from './ui/tooltip'
 import { Button } from './ui/button'
@@ -16,18 +18,18 @@ import { Badge } from './ui/badge'
 import EditMetadataModal from './EditMetadataModal'
 
 export default function TierList() {
-  const {
-    title,
-    subtitle,
-    author,
-    tiers,
-    items,
-    containers,
-    addTier,
-    previewMode,
-    presentationTheme,
-    setEditMetadataOpen,
-  } = useTierListStore()
+  const title = useMetadataStore((s) => s.title)
+  const subtitle = useMetadataStore((s) => s.subtitle)
+  const author = useMetadataStore((s) => s.author)
+
+  const tiers = useTierDataStore((s) => s.tiers)
+  const items = useTierDataStore((s) => s.items)
+  const containers = useTierDataStore((s) => s.containers)
+  const addTier = useTierDataStore((s) => s.addTier)
+
+  const previewMode = useUiStore((s) => s.previewMode)
+  const presentationTheme = useUiStore((s) => s.presentationTheme)
+  const setEditMetadataOpen = useUiStore((s) => s.setEditMetadataOpen)
 
   // Statistics calculation
   const totalItemsCount = items.length
