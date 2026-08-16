@@ -19,8 +19,10 @@ import {
 } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
+import { useNavigate } from '@tanstack/react-router'
 
 export default function TemplateSelectorModal() {
+  const navigate = useNavigate()
   const isTemplateOpen = useUiStore((s) => s.isTemplateOpen)
   const setTemplateOpen = useUiStore((s) => s.setTemplateOpen)
 
@@ -54,6 +56,7 @@ export default function TemplateSelectorModal() {
   const handleSelect = (templateId: string) => {
     loadTemplate(templateId)
     setTemplateOpen(false)
+    navigate({ to: '/templates/$templateId', params: { templateId } })
   }
 
   return (

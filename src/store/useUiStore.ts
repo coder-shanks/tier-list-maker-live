@@ -1,10 +1,17 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import type { ItemSize } from '../lib/types'
+import { useTierDataStore } from './useTierDataStore'
 
 export type PresentationTheme = 'studio' | 'neon' | 'slate' | 'noir' | 'clean'
+export type ActiveView = 'landing' | 'studio'
 
 export interface UiState {
+  // Navigation View
+  activeView: ActiveView
+  setActiveView: (view: ActiveView) => void
+  openStudioWithTemplate: (templateId?: string) => void
+
   // Theme & Appearance
   theme: 'dark' | 'light'
   setTheme: (theme: 'dark' | 'light') => void
@@ -61,6 +68,23 @@ function applyThemeToDocument(theme: 'dark' | 'light') {
 export const useUiStore = create<UiState>()(
   persist(
     (set, get) => ({
+      activeView: 'landing',
+      setActiveView: (activeView) => {
+        set({ activeView })
+        if (typeof window !== 'undefined') {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+      },
+      openStudioWithTemplate: (templateId) => {
+        if (templateId) {
+          useTierDataStore.getState().loadTemplate(templateId)
+        }
+        set({ activeView: 'studio' })
+        if (typeof window !== 'undefined') {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+      },
+
       theme: 'dark',
       setTheme: (theme) => {
         applyThemeToDocument(theme)
@@ -119,6 +143,7 @@ export const useUiStore = create<UiState>()(
       name: 'tier-list-ui-storage',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
+        activeView: state.activeView,
         theme: state.theme,
         presentationTheme: state.presentationTheme,
         itemSize: state.itemSize,

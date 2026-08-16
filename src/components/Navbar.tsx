@@ -14,6 +14,7 @@ import { useTierDataStore, performUndo, performRedo } from '../store/useTierData
 import { useHistoryStore } from '../store/useHistoryStore'
 import { useBlindStore } from '../store/useBlindStore'
 import { TEMPLATES } from '../lib/constants'
+import { Link } from '@tanstack/react-router'
 import { SimpleTooltip } from './ui/tooltip'
 import { Button } from './ui/button'
 import ConfirmModal from './ConfirmModal'
@@ -49,22 +50,27 @@ export default function Navbar() {
     <header className="sticky top-0 z-40 w-full border-b border-border/80 bg-background/90 backdrop-blur-xl transition-colors">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-3">
         {/* Left: Brand Identity & Template Switcher */}
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg overflow-hidden border border-border bg-zinc-950 flex items-center justify-center shadow-xs">
-              <img src="/logo.png" alt="Tier Studio Logo" className="w-full h-full object-cover" />
-            </div>
-            <div className="hidden xs:block">
-              <div className="flex items-center gap-1.5 leading-none">
-                <span className="font-extrabold text-sm tracking-tight text-foreground" style={{ fontFamily: 'var(--font-display)' }}>
-                  TIER STUDIO
-                </span>
-                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
-                  LIVE
-                </span>
+        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+          <SimpleTooltip content="Back to Landing Page" side="bottom">
+            <Link
+              to="/"
+              className="flex items-center gap-2 group cursor-pointer p-1 rounded-xl hover:bg-secondary/80 transition-all text-left"
+            >
+              <div className="w-8 h-8 rounded-lg overflow-hidden border border-border bg-zinc-950 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                <img src="/logo.png" alt="Tier Studio Logo" className="w-full h-full object-cover" />
               </div>
-            </div>
-          </div>
+              <div className="hidden xs:block">
+                <div className="flex items-center gap-1.5 leading-none">
+                  <span className="font-extrabold text-sm tracking-tight text-foreground group-hover:text-rose-500 transition-colors" style={{ fontFamily: 'var(--font-display)' }}>
+                    TIER STUDIO
+                  </span>
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20">
+                    LIVE
+                  </span>
+                </div>
+              </div>
+            </Link>
+          </SimpleTooltip>
 
           <div className="h-4 w-px bg-border hidden sm:block" />
 
