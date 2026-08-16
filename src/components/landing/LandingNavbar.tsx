@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
+import { useState, useEffect } from "react"
+import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Sun01Icon,
   Moon02Icon,
@@ -9,9 +9,10 @@ import {
   Menu01Icon,
   Cancel01Icon,
   TvIcon,
-} from '@hugeicons/core-free-icons'
-import { useUiStore } from '../../store/useUiStore'
-import { Link } from '@tanstack/react-router'
+} from "@hugeicons/core-free-icons"
+import { useUiStore } from "../../store/useUiStore"
+import { Link } from "@tanstack/react-router"
+import { EXTERNAL_LINKS } from "@/lib/constants"
 
 export default function LandingNavbar() {
   const theme = useUiStore((s) => s.theme)
@@ -23,23 +24,23 @@ export default function LandingNavbar() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
     }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   const navLinks = [
-    { label: 'Features', href: '#features' },
-    { label: 'Templates', href: '#templates' },
-    { label: 'Streamer Mode', href: '#streamer' },
-    { label: 'Shortcuts', href: '#shortcuts' },
-    { label: 'Why Us', href: '#why-us' },
+    { label: "Features", href: "#features" },
+    { label: "Templates", href: "#templates" },
+    { label: "Streamer Mode", href: "#streamer" },
+    { label: "Shortcuts", href: "#shortcuts" },
+    { label: "Why Us", href: "#why-us" },
   ]
 
   const handleNavClick = (href: string) => {
     setMobileMenuOpen(false)
     const el = document.querySelector(href)
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth' })
+      el.scrollIntoView({ behavior: "smooth" })
     }
   }
 
@@ -47,8 +48,8 @@ export default function LandingNavbar() {
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         isScrolled
-          ? 'bg-zinc-950/85 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-black/40'
-          : 'bg-zinc-950/40 backdrop-blur-md border-b border-white/5'
+          ? "bg-zinc-950/85 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-black/40"
+          : "bg-zinc-950/40 backdrop-blur-md border-b border-white/5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
@@ -99,12 +100,16 @@ export default function LandingNavbar() {
         <div className="flex items-center gap-2 sm:gap-3">
           {/* GitHub Star Badge */}
           <a
-            href="https://github.com"
+            href={EXTERNAL_LINKS.GITHUB_REPO}
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-white/10 text-zinc-300 hover:text-white text-xs font-mono transition-all active:scale-95 shadow-xs"
           >
-            <HugeiconsIcon icon={StarIcon} size={14} className="text-amber-400 fill-amber-400" />
+            <HugeiconsIcon
+              icon={StarIcon}
+              size={14}
+              className="text-amber-400 fill-amber-400"
+            />
             <span className="font-semibold">Star on GitHub</span>
           </a>
 
@@ -112,11 +117,11 @@ export default function LandingNavbar() {
           <button
             type="button"
             onClick={toggleTheme}
-            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
             className="p-2 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-white/10 text-zinc-300 hover:text-white transition-all active:scale-95 cursor-pointer"
           >
             <HugeiconsIcon
-              icon={theme === 'dark' ? Sun01Icon : Moon02Icon}
+              icon={theme === "dark" ? Sun01Icon : Moon02Icon}
               size={16}
             />
           </button>
@@ -124,7 +129,7 @@ export default function LandingNavbar() {
           {/* Studio Quick Launch CTA */}
           <Link
             to="/templates/$templateId"
-            params={{ templateId: 'games' }}
+            params={{ templateId: "games" }}
             className="relative group inline-flex items-center gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 hover:from-rose-500 hover:to-amber-400 shadow-lg shadow-rose-600/30 hover:shadow-rose-600/50 active:scale-95 transition-all overflow-hidden cursor-pointer"
           >
             <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/25 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
@@ -170,7 +175,7 @@ export default function LandingNavbar() {
           <div className="pt-2 border-t border-white/10 flex items-center justify-between">
             <Link
               to="/templates/$templateId"
-              params={{ templateId: 'games' }}
+              params={{ templateId: "games" }}
               className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-500 text-white font-bold text-xs"
             >
               <HugeiconsIcon icon={TvIcon} size={15} />

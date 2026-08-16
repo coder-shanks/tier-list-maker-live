@@ -1,5 +1,9 @@
 import type { ColorPreset, TemplateData, Tier } from './types'
 
+export const EXTERNAL_LINKS = {
+  GITHUB_REPO: 'https://github.com/coder-shanks/tier-list-maker-live'
+}
+
 export const COLOR_PRESETS: ColorPreset[] = [
   { id: 'crimson', name: 'Ruby S', bg: '#e11d48', text: '#ffffff', border: '#be123c' },
   { id: 'ember', name: 'Flame A', bg: '#ea580c', text: '#ffffff', border: '#c2410c' },

@@ -1,4 +1,4 @@
-import { HugeiconsIcon } from '@hugeicons/react'
+import { HugeiconsIcon } from "@hugeicons/react"
 import {
   SparklesIcon,
   ArrowRight01Icon,
@@ -6,25 +6,29 @@ import {
   Moon02Icon,
   CommandIcon,
   StarIcon,
-} from '@hugeicons/core-free-icons'
-import { useUiStore } from '../../store/useUiStore'
-import { Link } from '@tanstack/react-router'
+} from "@hugeicons/core-free-icons"
+import { useUiStore } from "../../store/useUiStore"
+import { Link } from "@tanstack/react-router"
+import { EXTERNAL_LINKS } from "@/lib/constants"
 
 export default function LandingFooter() {
   const theme = useUiStore((s) => s.theme)
   const toggleTheme = useUiStore((s) => s.toggleTheme)
 
   const footerShortcuts = [
-    { key: '⌘Z', name: 'Undo' },
-    { key: '⌘Y', name: 'Redo' },
-    { key: '⌘E', name: 'Export' },
-    { key: 'R', name: 'Roulette' },
-    { key: 'P', name: 'Present' },
-    { key: 'N', name: 'Add Card' },
+    { key: "⌘Z", name: "Undo" },
+    { key: "⌘Y", name: "Redo" },
+    { key: "⌘E", name: "Export" },
+    { key: "R", name: "Roulette" },
+    { key: "P", name: "Present" },
+    { key: "N", name: "Add Card" },
   ]
 
   return (
-    <footer id="shortcuts" className="relative pt-16 sm:pt-24 pb-12 overflow-hidden bg-zinc-950">
+    <footer
+      id="shortcuts"
+      className="relative pt-16 sm:pt-24 pb-12 overflow-hidden bg-zinc-950"
+    >
       {/* Background glow banner */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-rose-500/50 to-transparent" />
 
@@ -43,18 +47,19 @@ export default function LandingFooter() {
 
             <h2
               className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4"
-              style={{ fontFamily: 'var(--font-display)' }}
+              style={{ fontFamily: "var(--font-display)" }}
             >
               Ready to rank the best of the best?
             </h2>
 
             <p className="text-base sm:text-lg text-zinc-300 mb-8 max-w-xl mx-auto">
-              Start building your tier list right now. No email required, zero ads, and instant high-res export.
+              Start building your tier list right now. No email required, zero
+              ads, and instant high-res export.
             </p>
 
             <Link
               to="/templates/$templateId"
-              params={{ templateId: 'games' }}
+              params={{ templateId: "games" }}
               className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl font-extrabold text-sm sm:text-base text-white bg-gradient-to-r from-rose-600 via-rose-500 to-amber-500 hover:from-rose-500 hover:to-amber-400 shadow-2xl shadow-rose-600/40 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer"
             >
               <HugeiconsIcon icon={SparklesIcon} size={18} />
@@ -67,7 +72,11 @@ export default function LandingFooter() {
         {/* Shortcuts Cheat Sheet Strip */}
         <div className="py-6 px-6 rounded-2xl bg-zinc-900/50 border border-white/10 mb-12 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-400">
           <div className="flex items-center gap-2 text-white font-bold">
-            <HugeiconsIcon icon={CommandIcon} size={16} className="text-rose-400" />
+            <HugeiconsIcon
+              icon={CommandIcon}
+              size={16}
+              className="text-rose-400"
+            />
             <span>Studio Keyboard Shortcuts</span>
           </div>
 
@@ -87,7 +96,9 @@ export default function LandingFooter() {
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-400">
           <div className="flex items-center gap-2.5">
             <img src="/logo.png" alt="Logo" className="w-5 h-5 rounded" />
-            <span className="text-zinc-200 font-bold">Live Tier List Maker</span>
+            <span className="text-zinc-200 font-bold">
+              Live Tier List Maker
+            </span>
             <span>•</span>
             <span>Ad-free tier list suite for creators</span>
           </div>
@@ -99,14 +110,16 @@ export default function LandingFooter() {
               className="flex items-center gap-1.5 text-zinc-400 hover:text-white transition-colors cursor-pointer"
             >
               <HugeiconsIcon
-                icon={theme === 'dark' ? Sun01Icon : Moon02Icon}
+                icon={theme === "dark" ? Sun01Icon : Moon02Icon}
                 size={14}
               />
-              <span className="capitalize">{theme === 'dark' ? 'Light' : 'Dark'} Mode</span>
+              <span className="capitalize">
+                {theme === "dark" ? "Light" : "Dark"} Mode
+              </span>
             </button>
 
             <a
-              href="https://github.com"
+              href={EXTERNAL_LINKS.GITHUB_REPO}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-zinc-400 hover:text-white transition-colors"
