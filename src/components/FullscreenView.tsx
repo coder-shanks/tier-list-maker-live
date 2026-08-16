@@ -1,14 +1,9 @@
-import { useEffect } from 'react'
 import confetti from 'canvas-confetti'
 import { HugeiconsIcon } from '@hugeicons/react'
 import {
   SparklesIcon,
   Download01Icon,
   EyeOffIcon,
-  Sun01Icon,
-  Moon02Icon,
-  FullScreenIcon,
-  MinimizeScreenIcon,
   ColorsIcon,
 } from '@hugeicons/core-free-icons'
 import { useUiStore, type PresentationTheme } from '../store/useUiStore'
@@ -20,12 +15,8 @@ import { Badge } from './ui/badge'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 
 export default function FullscreenView() {
-  const fullscreenMode = useUiStore((s) => s.fullscreenMode)
-  const setFullscreenMode = useUiStore((s) => s.setFullscreenMode)
   const previewMode = useUiStore((s) => s.previewMode)
   const setPreviewMode = useUiStore((s) => s.setPreviewMode)
-  const theme = useUiStore((s) => s.theme)
-  const toggleTheme = useUiStore((s) => s.toggleTheme)
   const presentationTheme = useUiStore((s) => s.presentationTheme)
   const setPresentationTheme = useUiStore((s) => s.setPresentationTheme)
   const itemSize = useUiStore((s) => s.itemSize)
@@ -35,51 +26,14 @@ export default function FullscreenView() {
   const items = useTierDataStore((s) => s.items)
   const containers = useTierDataStore((s) => s.containers)
 
-  // Track browser native fullscreen state and sync with preview mode
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      const isDocFullscreen = Boolean(document.fullscreenElement)
-      setFullscreenMode(isDocFullscreen)
-      if (!isDocFullscreen) {
-        // Exiting browser fullscreen automatically exits presentation mode too
-        setPreviewMode(false)
-      }
-    }
-
-    document.addEventListener('fullscreenchange', handleFullscreenChange)
-    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
-  }, [setFullscreenMode, setPreviewMode])
-
-  const handleExitAll = async () => {
+  const handleExit = () => {
     setPreviewMode(false)
-    setFullscreenMode(false)
-    if (document.fullscreenElement) {
-      try {
-        await document.exitFullscreen()
-      } catch (err) {
-        console.warn('Exit fullscreen failed:', err)
-      }
-    }
-  }
-
-  const toggleBrowserFullscreen = async () => {
-    try {
-      if (!document.fullscreenElement) {
-        await document.documentElement.requestFullscreen()
-        setFullscreenMode(true)
-      } else {
-        await handleExitAll()
-      }
-    } catch (err) {
-      console.warn('Fullscreen request failed:', err)
-      setFullscreenMode(!fullscreenMode)
-    }
   }
 
   const triggerConfetti = () => {
     confetti({
-      particleCount: 80,
-      spread: 70,
+      particleCount: 90,
+      spread: 75,
       origin: { y: 0.7 },
       colors: ['#e11d48', '#ea580c', '#d97706', '#059669', '#0284c7', '#7c3aed'],
     })
@@ -99,22 +53,22 @@ export default function FullscreenView() {
   ]
 
   const sizeOptions: { size: ItemSize; label: string; tooltip: string }[] = [
-    { size: 'compact', label: 'S', tooltip: 'Small Cards' },
-    { size: 'normal', label: 'M', tooltip: 'Medium Cards' },
-    { size: 'large', label: 'L', tooltip: 'Large Cards' },
+    { size: 'compact', label: 'S', tooltip: 'Small Cards (64px)' },
+    { size: 'normal', label: 'M', tooltip: 'Medium Cards (84px)' },
+    { size: 'large', label: 'L', tooltip: 'Large Cards (104px)' },
   ]
 
-  // Only render floating broadcast bar when in preview or fullscreen mode
-  if (!previewMode && !fullscreenMode) return null
+  // Only render floating presentation toolbar when in presentation mode
+  if (!previewMode) return null
 
   return (
     <aside
       aria-label="Presentation mode toolbar"
       className="fixed bottom-6 inset-x-0 z-50 flex justify-center items-center pointer-events-none px-4 animate-in fade-in slide-in-from-bottom-4 duration-200"
     >
-      <div className="pointer-events-auto flex flex-wrap items-center gap-2 p-1.5 sm:p-2 rounded-xl bg-card/95 border border-border text-foreground shadow-2xl backdrop-blur-xl transition-all">
+      <div className="pointer-events-auto flex flex-wrap items-center gap-2 p-1.5 sm:p-2 rounded-2xl bg-card/95 border border-border/80 text-foreground shadow-2xl backdrop-blur-xl ring-1 ring-border/50 transition-all">
         {/* Live Broadcast Progress Chip */}
-        <div className="flex items-center gap-2 px-2.5 py-1 rounded-lg bg-secondary border border-border text-xs font-semibold">
+        <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-secondary/80 border border-border/70 text-xs font-semibold">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <span className="hidden sm:inline text-muted-foreground">Ranked:</span>
           <span className="font-mono font-bold text-foreground">
@@ -126,15 +80,15 @@ export default function FullscreenView() {
         </div>
 
         {/* Card Size Selector */}
-        <div className="flex items-center bg-secondary border border-border rounded-lg p-0.5">
+        <div className="flex items-center bg-secondary/80 border border-border/70 rounded-xl p-0.5">
           {sizeOptions.map((opt) => (
             <SimpleTooltip key={opt.size} content={opt.tooltip} side="top">
               <button
                 type="button"
                 onClick={() => setItemSize(opt.size)}
-                className={`px-2 py-0.5 rounded text-[11px] font-mono font-bold transition-all ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                   itemSize === opt.size
-                    ? 'bg-background text-foreground shadow-2xs'
+                    ? 'bg-background text-foreground shadow-xs'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
@@ -150,7 +104,7 @@ export default function FullscreenView() {
             render={
               <button
                 type="button"
-                className="p-1.5 sm:px-2.5 sm:py-1 rounded-lg bg-secondary hover:bg-accent text-foreground border border-border transition-all flex items-center gap-1.5 text-xs font-semibold"
+                className="p-1.5 sm:px-2.5 sm:py-1 rounded-xl bg-secondary/80 hover:bg-accent text-foreground border border-border/70 transition-all flex items-center gap-1.5 text-xs font-semibold cursor-pointer"
                 title="Presentation Backdrop Theme"
               >
                 <HugeiconsIcon icon={ColorsIcon} size={14} />
@@ -158,7 +112,7 @@ export default function FullscreenView() {
               </button>
             }
           />
-          <PopoverContent side="top" align="center" className="w-56 p-2.5 space-y-1.5 bg-card text-foreground border-border">
+          <PopoverContent side="top" align="center" className="w-56 p-2.5 space-y-1.5 bg-card text-foreground border-border rounded-xl shadow-xl">
             <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-wider">
               Backdrop Style:
             </span>
@@ -168,7 +122,7 @@ export default function FullscreenView() {
                   key={th.id}
                   type="button"
                   onClick={() => setPresentationTheme(th.id)}
-                  className={`flex items-center justify-between p-2 rounded-lg border text-xs font-semibold transition-all ${
+                  className={`flex items-center justify-between p-2 rounded-lg border text-xs font-semibold transition-all cursor-pointer ${
                     presentationTheme === th.id
                       ? 'bg-secondary border-rose-500 text-foreground ring-1 ring-rose-500/40'
                       : 'bg-card hover:bg-secondary border-border text-muted-foreground'
@@ -192,20 +146,9 @@ export default function FullscreenView() {
           <button
             type="button"
             onClick={triggerConfetti}
-            className="p-1.5 sm:p-2 rounded-lg bg-secondary hover:bg-accent text-rose-500 border border-border transition-all active:scale-95 shadow-2xs"
+            className="p-1.5 sm:p-2 rounded-xl bg-secondary/80 hover:bg-accent text-rose-500 border border-border/70 transition-all active:scale-95 shadow-xs cursor-pointer"
           >
             <HugeiconsIcon icon={SparklesIcon} size={15} />
-          </button>
-        </SimpleTooltip>
-
-        {/* Dark/Light Toggle */}
-        <SimpleTooltip content="Toggle Theme" side="top">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="p-1.5 sm:p-2 rounded-lg bg-secondary hover:bg-accent text-muted-foreground hover:text-foreground border border-border transition-colors"
-          >
-            <HugeiconsIcon icon={theme === 'dark' ? Sun01Icon : Moon02Icon} size={14} />
           </button>
         </SimpleTooltip>
 
@@ -213,39 +156,24 @@ export default function FullscreenView() {
         <Button
           size="xs"
           onClick={() => setExportOpen(true)}
-          className="bg-foreground text-background hover:opacity-90 font-bold gap-1.5 h-8 px-2.5 rounded-lg shadow-sm"
+          className="bg-foreground text-background hover:opacity-90 font-bold gap-1.5 h-8 px-3 rounded-xl shadow-sm cursor-pointer"
         >
           <HugeiconsIcon icon={Download01Icon} size={13} />
           <span className="hidden sm:inline">Export</span>
         </Button>
 
-        {/* Fullscreen Toggle */}
-        <SimpleTooltip
-          content={fullscreenMode ? 'Exit Fullscreen (Esc or F)' : 'Enter Fullscreen (F)'}
-          side="top"
+        {/* Exit Presentation Mode */}
+        <Button
+          size="xs"
+          variant="destructive"
+          onClick={handleExit}
+          className="font-bold gap-1.5 h-8 px-3 rounded-xl active:scale-95 cursor-pointer"
         >
-          <button
-            type="button"
-            onClick={toggleBrowserFullscreen}
-            className="p-1.5 sm:p-2 rounded-lg bg-secondary hover:bg-accent text-foreground border border-border transition-all active:scale-95"
-          >
-            <HugeiconsIcon icon={fullscreenMode ? MinimizeScreenIcon : FullScreenIcon} size={14} />
-          </button>
-        </SimpleTooltip>
-
-        {/* 1-Click Unified Exit Button for both Preview & Fullscreen */}
-        {(previewMode || fullscreenMode) && (
-          <Button
-            size="xs"
-            variant="destructive"
-            onClick={handleExitAll}
-            className="font-bold gap-1.5 h-8 px-2.5 rounded-lg active:scale-95"
-          >
-            <HugeiconsIcon icon={EyeOffIcon} size={13} />
-            <span>Exit</span>
-          </Button>
-        )}
+          <HugeiconsIcon icon={EyeOffIcon} size={13} />
+          <span>Exit (Esc)</span>
+        </Button>
       </div>
     </aside>
   )
 }
+

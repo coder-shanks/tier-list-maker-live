@@ -13,6 +13,7 @@ import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts";
 import Navbar from "./components/Navbar";
 import TierList from "./components/TierList";
 import ItemsList from "./components/ItemsList";
+import FloatingStudioDock from "./components/FloatingStudioDock";
 import AddItemModal from "./components/AddItemModal";
 import ExportModal from "./components/ExportModal";
 import TemplateSelectorModal from "./components/TemplateSelectorModal";
@@ -26,7 +27,7 @@ import { TooltipProvider } from "./components/ui/tooltip";
 
 export default function App() {
   const theme = useUiStore((s) => s.theme);
-  const fullscreenMode = useUiStore((s) => s.fullscreenMode);
+  const previewMode = useUiStore((s) => s.previewMode);
   const activeDragId = useUiStore((s) => s.activeDragId);
   const setActiveDragId = useUiStore((s) => s.setActiveDragId);
 
@@ -112,19 +113,19 @@ export default function App() {
         <div
           className={`min-h-screen ${pageBgClass} text-foreground flex flex-col font-sans antialiased transition-colors duration-200 relative`}
         >
-          {/* Top Navbar */}
-          {!fullscreenMode && <Navbar />}
+          {/* Top Navbar (Hidden in presentation mode for full immersion) */}
+          {!previewMode && <Navbar />}
 
-          {/* Main Canvas Area */}
+          {/* Main Canvas Area - with generous bottom padding so floating dock/HUD never overlaps */}
           <main
             className={`flex-1 px-3 sm:px-6 max-w-7xl w-full mx-auto space-y-4 sm:space-y-6 transition-all duration-200 ${
-              fullscreenMode ? "py-6 sm:py-10" : "py-4 sm:py-6"
+              previewMode ? "py-8 sm:py-12 pb-36" : "py-4 sm:py-6 pb-32"
             }`}
           >
             {/* Main Tier Canvas */}
             <TierList />
 
-            {/* Unassigned Item Vault Dock */}
+            {/* Unassigned Item Vault Dock (Hidden in presentation mode) */}
             <ItemsList />
           </main>
 
@@ -133,7 +134,10 @@ export default function App() {
             {activeItem ? <DraggableItem item={activeItem} isOverlay /> : null}
           </DragOverlay>
 
-          {/* Presentation HUD View */}
+          {/* Floating Studio Dock (Quick controls for normal mode) */}
+          <FloatingStudioDock />
+
+          {/* Presentation HUD Toolbar (Active in presentation mode) */}
           <FullscreenView />
 
           {/* Key Shortcuts Footer */}
@@ -151,3 +155,4 @@ export default function App() {
     </TooltipProvider>
   );
 }
+

@@ -10,11 +10,9 @@ export interface UiState {
   setTheme: (theme: 'dark' | 'light') => void
   toggleTheme: () => void
 
-  // Presentation & Fullscreen
+  // Presentation Theme
   presentationTheme: PresentationTheme
   setPresentationTheme: (theme: PresentationTheme) => void
-  fullscreenMode: boolean
-  setFullscreenMode: (fullscreen: boolean) => void
 
   // Active Drag State for DragOverlay
   activeDragId: string | null
@@ -76,8 +74,6 @@ export const useUiStore = create<UiState>()(
 
       presentationTheme: 'studio',
       setPresentationTheme: (presentationTheme) => set({ presentationTheme }),
-      fullscreenMode: false,
-      setFullscreenMode: (fullscreenMode) => set({ fullscreenMode }),
 
       activeDragId: null,
       setActiveDragId: (activeDragId) => set({ activeDragId }),

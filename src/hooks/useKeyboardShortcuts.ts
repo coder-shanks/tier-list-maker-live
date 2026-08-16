@@ -10,8 +10,6 @@ export function useKeyboardShortcuts() {
   const setRandomPickerOpen = useUiStore((s) => s.setRandomPickerOpen)
   const previewMode = useUiStore((s) => s.previewMode)
   const setPreviewMode = useUiStore((s) => s.setPreviewMode)
-  const fullscreenMode = useUiStore((s) => s.fullscreenMode)
-  const setFullscreenMode = useUiStore((s) => s.setFullscreenMode)
   const isBlindSetupOpen = useUiStore((s) => s.isBlindSetupOpen)
   const setBlindSetupOpen = useUiStore((s) => s.setBlindSetupOpen)
 
@@ -42,30 +40,12 @@ export function useKeyboardShortcuts() {
       } else if ((e.metaKey || e.ctrlKey) && key === 'e') {
         e.preventDefault()
         setExportOpen(true)
-      } else if (key === 'f' && !e.metaKey && !e.ctrlKey) {
-        e.preventDefault()
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch(() => {})
-          setFullscreenMode(true)
-        } else {
-          document.exitFullscreen().catch(() => {})
-          setFullscreenMode(false)
-          setPreviewMode(false)
-        }
       } else if (key === 'p' && !e.metaKey && !e.ctrlKey) {
         e.preventDefault()
+        setPreviewMode(!previewMode)
+      } else if (e.key === 'Escape') {
         if (previewMode) {
           setPreviewMode(false)
-          setFullscreenMode(false)
-          if (document.fullscreenElement) document.exitFullscreen().catch(() => {})
-        } else {
-          setPreviewMode(true)
-        }
-      } else if (e.key === 'Escape') {
-        setPreviewMode(false)
-        setFullscreenMode(false)
-        if (document.fullscreenElement) {
-          document.exitFullscreen().catch(() => {})
         }
       } else if (key === 'n' && !e.metaKey && !e.ctrlKey) {
         // Disabled during active blind challenge
@@ -94,10 +74,9 @@ export function useKeyboardShortcuts() {
     setBlindSetupOpen,
     previewMode,
     setPreviewMode,
-    fullscreenMode,
-    setFullscreenMode,
     isBlindActive,
     isRandomPickerOpen,
     isBlindSetupOpen,
   ])
 }
+

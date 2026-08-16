@@ -3,9 +3,8 @@ import { useUiStore } from '../store/useUiStore'
 
 export const Footer = memo(function Footer() {
   const previewMode = useUiStore((s) => s.previewMode)
-  const fullscreenMode = useUiStore((s) => s.fullscreenMode)
 
-  if (previewMode || fullscreenMode) {
+  if (previewMode) {
     return null
   }
 
@@ -22,15 +21,11 @@ export const Footer = memo(function Footer() {
         </span>
         <span>•</span>
         <span className="inline-flex items-center gap-1">
-          <kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground border border-border">F</kbd> Fullscreen
-        </span>
-        <span>•</span>
-        <span className="inline-flex items-center gap-1">
           <kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground border border-border">P</kbd> Present
         </span>
         <span>•</span>
         <span className="inline-flex items-center gap-1">
-          <kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground border border-border">N</kbd> New Item
+          <kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground border border-border">N</kbd> New Card
         </span>
         <span>•</span>
         <span className="inline-flex items-center gap-1">
@@ -50,3 +45,4 @@ export const Footer = memo(function Footer() {
 })
 
 export default Footer
+
