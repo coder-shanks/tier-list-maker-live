@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark, .dark *));
 
 @theme inline {
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -43,7 +43,7 @@
 }
 
 :root {
-  --background: #f8f9fc;
+  --background: #f8fafc;
   --foreground: #0f172a;
   --card: #ffffff;
   --card-foreground: #0f172a;
@@ -51,16 +51,16 @@
   --popover-foreground: #0f172a;
   --primary: #0f172a;
   --primary-foreground: #ffffff;
-  --secondary: #f1f4f9;
-  --secondary-foreground: #1e293b;
-  --muted: #f1f4f9;
-  --muted-foreground: #64748b;
-  --accent: #f1f4f9;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #475569;
+  --accent: #e2e8f0;
   --accent-foreground: #0f172a;
   --destructive: #e11d48;
-  --border: rgba(15, 23, 42, 0.08);
-  --input: rgba(15, 23, 42, 0.12);
-  --ring: #0f172a;
+  --border: #e2e8f0;
+  --input: #cbd5e1;
+  --ring: #e11d48;
   --radius: 0.75rem;
 }
 
@@ -98,7 +98,7 @@
     color-scheme: dark light;
   }
 
-  /* Refined high-craft dark scrollbar */
+  /* Refined scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -107,10 +107,16 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(140, 150, 170, 0.2);
+    background: rgba(100, 116, 139, 0.25);
     border-radius: 9999px;
   }
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgba(140, 150, 170, 0.2);
+  }
   ::-webkit-scrollbar-thumb:hover {
+    background: rgba(100, 116, 139, 0.45);
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
     background: rgba(140, 150, 170, 0.35);
   }
 }
@@ -123,8 +129,8 @@
 }
 
 .studio-grid-light {
-  background-color: #f8f9fc;
-  background-image: radial-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px);
+  background-color: #f8fafc;
+  background-image: radial-gradient(rgba(15, 23, 42, 0.07) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
@@ -137,9 +143,17 @@
 
 /* Tactile Tile Rim Lighting */
 .tile-rim {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.dark .tile-rim {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .tile-rim-overlay {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 16px 36px rgba(0, 0, 0, 0.3);
+}
+
+.dark .tile-rim-overlay {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 16px 36px rgba(0, 0, 0, 0.45);
 }

@@ -174,7 +174,7 @@ export default function StreamerShowcaseSection() {
   }
 
   return (
-    <section id="streamer" className="relative py-20 sm:py-28 overflow-hidden bg-zinc-950/60 border-t border-b border-white/10">
+    <section id="streamer" className="relative py-20 sm:py-28 overflow-hidden bg-secondary/30 dark:bg-zinc-950/60 border-t border-b border-border dark:border-white/10">
       {/* Radial accent glow */}
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-96 h-96 bg-rose-600/10 rounded-full blur-3xl pointer-events-none" />
@@ -182,17 +182,17 @@ export default function StreamerShowcaseSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono font-bold uppercase tracking-wider mb-4">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-mono font-bold uppercase tracking-wider mb-4">
             <HugeiconsIcon icon={TvIcon} size={14} />
             <span>Built for Streamers & Creators</span>
           </div>
           <h2
-            className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4"
+            className="text-3xl sm:text-5xl font-extrabold text-foreground tracking-tight leading-tight mb-4"
             style={{ fontFamily: 'var(--font-display)' }}
           >
             Live Stream Games & Audience Tools
           </h2>
-          <p className="text-base sm:text-lg text-zinc-300">
+          <p className="text-base sm:text-lg text-muted-foreground">
             Interactive widgets made for Twitch, YouTube, Kick, and Discord streams. Zero clutter, exciting viewer games, and instant shortcuts.
           </p>
         </div>
@@ -200,17 +200,17 @@ export default function StreamerShowcaseSection() {
         {/* 2-Column Showcase */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Interactive Mini-Game Widgets (Tabs for Roulette & Blind Mode) */}
-          <div className="lg:col-span-7 rounded-3xl p-6 sm:p-8 bg-zinc-900/90 border border-white/15 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+          <div className="lg:col-span-7 rounded-3xl p-6 sm:p-8 bg-card/90 dark:bg-zinc-900/90 border border-border dark:border-white/15 backdrop-blur-xl shadow-xl dark:shadow-2xl relative overflow-hidden">
             {/* Widget Mode Selector Tabs */}
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10 gap-2 flex-wrap">
-              <div className="flex items-center gap-1 p-1 bg-zinc-950/80 rounded-2xl border border-white/10">
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-border dark:border-white/10 gap-2 flex-wrap">
+              <div className="flex items-center gap-1 p-1 bg-secondary dark:bg-zinc-950/80 rounded-2xl border border-border dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setActiveTab('roulette')}
                   className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     activeTab === 'roulette'
                       ? 'bg-rose-600 text-white shadow-md'
-                      : 'text-zinc-400 hover:text-white'
+                      : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   <HugeiconsIcon icon={DicesIcon} size={15} />
@@ -223,7 +223,7 @@ export default function StreamerShowcaseSection() {
                   className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     activeTab === 'blind'
                       ? 'bg-purple-600 text-white shadow-md'
-                      : 'text-zinc-400 hover:text-white'
+                      : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   <HugeiconsIcon icon={ViewOffSlashIcon} size={15} />
@@ -231,8 +231,8 @@ export default function StreamerShowcaseSection() {
                 </button>
               </div>
 
-              <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+              <span className="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-ping" />
                 PLAYABLE DEMO
               </span>
             </div>
@@ -242,10 +242,10 @@ export default function StreamerShowcaseSection() {
               <div className="space-y-6 animate-in fade-in duration-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-base sm:text-lg font-bold text-white">
+                    <h3 className="text-base sm:text-lg font-bold text-foreground">
                       Live Item Roulette
                     </h3>
-                    <p className="text-xs text-zinc-400 font-mono">
+                    <p className="text-xs text-muted-foreground font-mono">
                       Spin to pick an unranked item live with your chat
                     </p>
                   </div>
@@ -256,7 +256,7 @@ export default function StreamerShowcaseSection() {
                   <div
                     className={`relative w-44 h-56 sm:w-48 sm:h-60 rounded-2xl overflow-hidden border-2 shadow-2xl transition-all duration-200 ${
                       isSpinning
-                        ? 'scale-95 blur-[0.5px] border-amber-400 rotate-1'
+                        ? 'scale-95 blur-[0.5px] border-amber-500 rotate-1'
                         : 'scale-100 border-rose-500 shadow-rose-500/30'
                     }`}
                   >
@@ -266,7 +266,7 @@ export default function StreamerShowcaseSection() {
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-3 text-left">
-                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-rose-400">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-rose-300">
                         {selectedPick.category}
                       </span>
                       <h4 className="text-base font-bold text-white line-clamp-1">
@@ -284,7 +284,7 @@ export default function StreamerShowcaseSection() {
                   </div>
 
                   {/* Mini Roulette Strip Carousel */}
-                  <div className="flex items-center gap-2 mt-5 p-2 bg-zinc-950/80 rounded-2xl border border-white/10 max-w-full overflow-x-auto">
+                  <div className="flex items-center gap-2 mt-5 p-2 bg-secondary/70 dark:bg-zinc-950/80 rounded-2xl border border-border dark:border-white/10 max-w-full overflow-x-auto">
                     {ROULETTE_CARDS.map((card, idx) => (
                       <div
                         key={card.id}
@@ -294,7 +294,7 @@ export default function StreamerShowcaseSection() {
                         className={`w-12 h-14 rounded-xl overflow-hidden border transition-all shrink-0 cursor-pointer ${
                           idx === selectedIndex
                             ? 'border-rose-500 ring-2 ring-rose-500/50 scale-105'
-                            : 'border-white/10 opacity-50 hover:opacity-100'
+                            : 'border-border dark:border-white/10 opacity-60 hover:opacity-100'
                         }`}
                       >
                         <img
@@ -308,7 +308,7 @@ export default function StreamerShowcaseSection() {
                 </div>
 
                 {/* Spin Trigger Button */}
-                <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center gap-3">
+                <div className="pt-3 border-t border-border dark:border-white/10 flex flex-col sm:flex-row items-center gap-3">
                   <button
                     type="button"
                     disabled={isSpinning}
@@ -326,7 +326,7 @@ export default function StreamerShowcaseSection() {
                   <Link
                     to="/templates/$templateId"
                     params={{ templateId: 'games' }}
-                    className="w-full sm:w-auto px-4 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold border border-white/10 transition-all text-center"
+                    className="w-full sm:w-auto px-4 py-3 rounded-xl bg-secondary dark:bg-zinc-800 hover:bg-accent dark:hover:bg-zinc-700 text-foreground dark:text-zinc-200 text-xs font-semibold border border-border dark:border-white/10 transition-all text-center"
                   >
                     Try in Studio
                   </Link>
@@ -339,13 +339,13 @@ export default function StreamerShowcaseSection() {
               <div className="space-y-5 animate-in fade-in duration-200">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <h3 className="text-base sm:text-lg font-bold text-foreground flex items-center gap-2">
                       <span>Blind Ranking Challenge</span>
-                      <span className="text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-full">
+                      <span className="text-[10px] font-mono font-bold bg-purple-500/20 text-purple-600 dark:text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-full">
                         Mystery Mode
                       </span>
                     </h3>
-                    <p className="text-xs text-zinc-400 font-mono">
+                    <p className="text-xs text-muted-foreground font-mono">
                       Rank each card 1 to 5 without knowing what comes next!
                     </p>
                   </div>
@@ -353,7 +353,7 @@ export default function StreamerShowcaseSection() {
                   <button
                     type="button"
                     onClick={resetBlindChallenge}
-                    className="flex items-center gap-1 text-xs font-mono text-zinc-400 hover:text-white px-2.5 py-1 rounded-lg bg-zinc-800 border border-white/10 cursor-pointer"
+                    className="flex items-center gap-1 text-xs font-mono text-muted-foreground hover:text-foreground px-2.5 py-1 rounded-lg bg-secondary dark:bg-zinc-800 border border-border dark:border-white/10 cursor-pointer"
                   >
                     <HugeiconsIcon icon={RefreshIcon} size={12} />
                     <span>Reset</span>
@@ -372,7 +372,7 @@ export default function StreamerShowcaseSection() {
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-2.5 text-left">
-                          <span className="text-[9px] font-mono font-bold text-purple-400 uppercase">
+                          <span className="text-[9px] font-mono font-bold text-purple-300 uppercase">
                             Card {blindIndex + 1} of {BLIND_DECK.length}
                           </span>
                           <h4 className="text-xs font-bold text-white leading-tight">
@@ -381,13 +381,13 @@ export default function StreamerShowcaseSection() {
                         </div>
                       </div>
                     ) : (
-                      <div className="w-36 h-48 sm:w-40 sm:h-52 rounded-2xl border-2 border-dashed border-emerald-500/50 bg-emerald-950/20 flex flex-col items-center justify-center p-4 text-center">
-                        <HugeiconsIcon icon={SparklesIcon} size={28} className="text-emerald-400 mb-2" />
-                        <span className="text-xs font-bold text-white">Challenge Finished!</span>
-                        <span className="text-[10px] text-zinc-400 font-mono mt-1">All 5 spots locked</span>
+                      <div className="w-36 h-48 sm:w-40 sm:h-52 rounded-2xl border-2 border-dashed border-emerald-500/50 bg-emerald-500/10 flex flex-col items-center justify-center p-4 text-center">
+                        <HugeiconsIcon icon={SparklesIcon} size={28} className="text-emerald-600 dark:text-emerald-400 mb-2" />
+                        <span className="text-xs font-bold text-foreground">Challenge Finished!</span>
+                        <span className="text-[10px] text-muted-foreground font-mono mt-1">All 5 spots locked</span>
                       </div>
                     )}
-                    <span className="text-[11px] font-mono text-zinc-400 mt-2">
+                    <span className="text-[11px] font-mono text-muted-foreground mt-2">
                       {!blindCompleted ? '👈 Choose slot on right' : '🎉 Great tier list!'}
                     </span>
                   </div>
@@ -410,10 +410,10 @@ export default function StreamerShowcaseSection() {
                           onClick={() => handlePlaceBlindSlot(slotNum)}
                           className={`p-2 rounded-xl border flex items-center justify-between gap-3 transition-all ${
                             placed
-                              ? 'bg-zinc-950/80 border-white/20'
+                              ? 'bg-secondary/80 dark:bg-zinc-950/80 border-border dark:border-white/20'
                               : blindCompleted
-                              ? 'bg-zinc-950/40 border-white/5 opacity-50'
-                              : 'bg-zinc-900/60 border-white/10 hover:border-purple-400/60 hover:bg-purple-950/20 cursor-pointer'
+                              ? 'bg-secondary/40 dark:bg-zinc-950/40 border-border/50 dark:border-white/5 opacity-50'
+                              : 'bg-secondary/50 dark:bg-zinc-900/60 border-border dark:border-white/10 hover:border-purple-500/60 hover:bg-purple-500/10 cursor-pointer'
                           }`}
                         >
                           <div className="flex items-center gap-2.5">
@@ -428,26 +428,26 @@ export default function StreamerShowcaseSection() {
                                 <img
                                   src={placed.image}
                                   alt={placed.title}
-                                  className="w-7 h-7 rounded-md object-cover border border-white/20"
+                                  className="w-7 h-7 rounded-md object-cover border border-border dark:border-white/20"
                                 />
-                                <span className="text-xs font-bold text-white line-clamp-1">
+                                <span className="text-xs font-bold text-foreground line-clamp-1">
                                   {placed.title}
                                 </span>
                               </div>
                             ) : (
-                              <span className="text-xs text-zinc-400 font-mono">
+                              <span className="text-xs text-muted-foreground font-mono">
                                 Empty spot — click to place
                               </span>
                             )}
                           </div>
 
                           {placed ? (
-                            <span className="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 flex items-center gap-0.5">
+                            <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 flex items-center gap-0.5">
                               <HugeiconsIcon icon={Tick02Icon} size={11} />
                               LOCKED
                             </span>
                           ) : (
-                            <span className="text-[10px] font-mono text-purple-400">
+                            <span className="text-[10px] font-mono font-bold text-purple-600 dark:text-purple-400">
                               + Assign
                             </span>
                           )}
@@ -458,7 +458,7 @@ export default function StreamerShowcaseSection() {
                 </div>
 
                 {/* Action CTA */}
-                <div className="pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center gap-3">
+                <div className="pt-3 border-t border-border dark:border-white/10 flex flex-col sm:flex-row items-center gap-3">
                   <Link
                     to="/templates/$templateId"
                     params={{ templateId: 'games' }}
@@ -472,7 +472,7 @@ export default function StreamerShowcaseSection() {
                     <button
                       type="button"
                       onClick={resetBlindChallenge}
-                      className="w-full sm:w-auto px-4 py-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold border border-white/10 transition-all cursor-pointer"
+                      className="w-full sm:w-auto px-4 py-3 rounded-xl bg-secondary dark:bg-zinc-800 hover:bg-accent dark:hover:bg-zinc-700 text-foreground dark:text-zinc-200 text-xs font-semibold border border-border dark:border-white/10 transition-all cursor-pointer"
                     >
                       Play Again
                     </button>
@@ -485,25 +485,25 @@ export default function StreamerShowcaseSection() {
           {/* Right Column: Clean Stream View & Keyboard HUD */}
           <div className="lg:col-span-5 space-y-6">
             {/* Feature 1: Clean Stream View */}
-            <div className="p-6 rounded-3xl bg-zinc-900/60 border border-white/10 backdrop-blur-md">
+            <div className="p-6 rounded-3xl bg-card/90 dark:bg-zinc-900/60 border border-border dark:border-white/10 backdrop-blur-md shadow-md">
               <div className="flex items-start gap-4">
-                <div className="p-3 rounded-2xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 shrink-0">
+                <div className="p-3 rounded-2xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 shrink-0">
                   <HugeiconsIcon icon={EyeIcon} size={24} />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-1">
+                  <h3 className="text-lg font-bold text-foreground mb-1">
                     1-Click Stream Presentation View
                   </h3>
-                  <p className="text-sm text-zinc-300 leading-relaxed mb-3">
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-3">
                     Instantly hide all sidebars and buttons so your live stream or screen share looks clean and professional.
                   </p>
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="px-2.5 py-1 rounded-lg bg-zinc-800 text-[11px] font-mono text-zinc-300 border border-white/10 flex items-center gap-1">
-                      <HugeiconsIcon icon={Tick02Icon} size={12} className="text-emerald-400" />
+                    <span className="px-2.5 py-1 rounded-lg bg-secondary text-[11px] font-mono text-foreground border border-border dark:border-white/10 flex items-center gap-1">
+                      <HugeiconsIcon icon={Tick02Icon} size={12} className="text-emerald-600 dark:text-emerald-400" />
                       Zero Clutter
                     </span>
-                    <span className="px-2.5 py-1 rounded-lg bg-zinc-800 text-[11px] font-mono text-zinc-300 border border-white/10 flex items-center gap-1">
-                      <HugeiconsIcon icon={Tick02Icon} size={12} className="text-emerald-400" />
+                    <span className="px-2.5 py-1 rounded-lg bg-secondary text-[11px] font-mono text-foreground border border-border dark:border-white/10 flex items-center gap-1">
+                      <HugeiconsIcon icon={Tick02Icon} size={12} className="text-emerald-600 dark:text-emerald-400" />
                       OBS Ready
                     </span>
                   </div>
@@ -512,15 +512,15 @@ export default function StreamerShowcaseSection() {
             </div>
 
             {/* Feature 2: Creator Keyboard Shortcuts */}
-            <div className="p-6 rounded-3xl bg-zinc-900/60 border border-white/10 backdrop-blur-md">
+            <div className="p-6 rounded-3xl bg-card/90 dark:bg-zinc-900/60 border border-border dark:border-white/10 backdrop-blur-md shadow-md">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  <HugeiconsIcon icon={CommandIcon} size={18} className="text-amber-400" />
-                  <h3 className="text-base font-bold text-white">
+                  <HugeiconsIcon icon={CommandIcon} size={18} className="text-amber-500 dark:text-amber-400" />
+                  <h3 className="text-base font-bold text-foreground">
                     Helpful Keyboard Shortcuts
                   </h3>
                 </div>
-                <span className="text-[11px] font-mono text-zinc-400">
+                <span className="text-[11px] font-mono text-muted-foreground">
                   Click key to preview
                 </span>
               </div>
@@ -535,18 +535,18 @@ export default function StreamerShowcaseSection() {
                       className={`p-3 rounded-2xl border transition-all cursor-pointer ${
                         isCurrent
                           ? 'bg-rose-500/15 border-rose-500 ring-1 ring-rose-500/40 shadow-sm'
-                          : 'bg-zinc-950/70 border-white/10 hover:border-white/20'
+                          : 'bg-secondary/60 dark:bg-zinc-950/70 border-border dark:border-white/10 hover:border-foreground/20 dark:hover:border-white/20'
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <kbd className="px-2 py-0.5 rounded-lg bg-zinc-800 text-rose-400 font-mono text-xs font-bold border border-white/10 shadow-xs">
+                        <kbd className="px-2 py-0.5 rounded-lg bg-background text-rose-600 dark:text-rose-400 font-mono text-xs font-bold border border-border dark:border-white/10 shadow-xs">
                           {sc.key}
                         </kbd>
-                        <span className="text-xs font-bold text-white">
+                        <span className="text-xs font-bold text-foreground">
                           {sc.name}
                         </span>
                       </div>
-                      <p className="text-[11px] text-zinc-400 leading-snug">
+                      <p className="text-[11px] text-muted-foreground leading-snug">
                         {sc.desc}
                       </p>
                     </div>

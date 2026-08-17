@@ -55,13 +55,13 @@ export default function DraggableItem({
   const deleteItem = useTierDataStore((s) => s.deleteItem)
   const updateItem = useTierDataStore((s) => s.updateItem)
 
-  // Deterministic subtle dark surface color for items without image
+  // Deterministic surface color for items without image (crisp in light and dark mode)
   const getMonogramBg = (name: string) => {
     const tones = [
-      'bg-slate-900 text-slate-200 border-slate-700',
-      'bg-zinc-900 text-zinc-200 border-zinc-700',
-      'bg-stone-900 text-stone-200 border-stone-700',
-      'bg-neutral-900 text-neutral-200 border-neutral-700',
+      'bg-slate-100 text-slate-900 border-slate-300 dark:bg-slate-900 dark:text-slate-200 dark:border-slate-700',
+      'bg-zinc-100 text-zinc-900 border-zinc-300 dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-700',
+      'bg-stone-100 text-stone-900 border-stone-300 dark:bg-stone-900 dark:text-stone-200 dark:border-stone-700',
+      'bg-neutral-100 text-neutral-900 border-neutral-300 dark:bg-neutral-900 dark:text-neutral-200 dark:border-neutral-700',
     ]
     let hash = 0
     for (let i = 0; i < name.length; i++) {

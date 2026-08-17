@@ -86,8 +86,8 @@ function SandboxCard({
   return (
     <div
       ref={ref}
-      className={`group relative select-none rounded-xl overflow-hidden cursor-grab active:cursor-grabbing shrink-0 border border-white/15 bg-zinc-900 shadow-md transition-all ${sizeClasses} ${
-        isDragging && !isOverlay ? 'opacity-30 scale-95' : 'hover:scale-[1.04] hover:shadow-xl hover:border-white/40'
+      className={`group relative select-none rounded-xl overflow-hidden cursor-grab active:cursor-grabbing shrink-0 border border-border dark:border-white/15 bg-card dark:bg-zinc-900 shadow-md transition-all ${sizeClasses} ${
+        isDragging && !isOverlay ? 'opacity-30 scale-95' : 'hover:scale-[1.04] hover:shadow-xl hover:border-foreground/30 dark:hover:border-white/40'
       } ${isOverlay ? 'shadow-2xl ring-2 ring-rose-500 scale-105 rotate-2 z-50 cursor-grabbing' : ''}`}
     >
       <img
@@ -96,11 +96,11 @@ function SandboxCard({
         className="w-full h-full object-cover pointer-events-none transition-transform duration-300 group-hover:scale-105"
         loading="lazy"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex flex-col justify-end p-1.5 pointer-events-none">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent flex flex-col justify-end p-1.5 pointer-events-none">
         <span className="font-bold text-white leading-tight line-clamp-1 drop-shadow-md">
           {item.title}
         </span>
-        <span className="text-[9px] text-zinc-400 font-mono line-clamp-1">
+        <span className="text-[9px] text-zinc-300 font-mono line-clamp-1">
           {item.category}
         </span>
       </div>
@@ -125,7 +125,7 @@ function SandboxTierRow({
       className={`flex items-stretch rounded-2xl border transition-all overflow-hidden ${
         isDropTarget
           ? 'ring-2 ring-rose-500/80 bg-rose-500/10 border-rose-500/50 scale-[1.008]'
-          : 'border-white/10 bg-zinc-950/70 hover:border-white/20'
+          : 'border-border dark:border-white/10 bg-secondary/40 dark:bg-zinc-950/70 hover:border-border/80 dark:hover:border-white/20'
       }`}
     >
       {/* Tier Label Badge */}
@@ -143,9 +143,9 @@ function SandboxTierRow({
       </div>
 
       {/* Droppable Items Container */}
-      <div className="flex-1 p-2 sm:p-2.5 flex items-center gap-2 sm:gap-2.5 overflow-x-auto min-h-[76px] sm:min-h-[96px] bg-zinc-900/40 backdrop-blur-md">
+      <div className="flex-1 p-2 sm:p-2.5 flex items-center gap-2 sm:gap-2.5 overflow-x-auto min-h-[76px] sm:min-h-[96px] bg-card/60 dark:bg-zinc-900/40 backdrop-blur-md">
         {items.length === 0 ? (
-          <div className="w-full text-center py-3 text-[11px] font-mono text-zinc-500 italic select-none">
+          <div className="w-full text-center py-3 text-[11px] font-mono text-muted-foreground italic select-none">
             Drop cards here or onto {tier.label}
           </div>
         ) : (
@@ -171,22 +171,22 @@ function SandboxPool({
       className={`rounded-2xl border p-3 transition-all ${
         isDropTarget
           ? 'ring-2 ring-cyan-500/70 bg-cyan-500/10 border-cyan-500/40'
-          : 'border-white/10 bg-zinc-950/60'
+          : 'border-border dark:border-white/10 bg-secondary/50 dark:bg-zinc-950/60'
       }`}
     >
       <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-zinc-400">
-          <HugeiconsIcon icon={Layers01Icon} size={14} className="text-zinc-500" />
+        <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-muted-foreground">
+          <HugeiconsIcon icon={Layers01Icon} size={14} className="text-muted-foreground" />
           <span>Unranked Cards ({items.length})</span>
         </div>
-        <span className="text-[10px] font-mono text-zinc-500">
+        <span className="text-[10px] font-mono text-muted-foreground">
           Drag cards to rank above ↗
         </span>
       </div>
 
       <div className="flex items-center gap-2 sm:gap-2.5 overflow-x-auto min-h-[80px] p-1">
         {items.length === 0 ? (
-          <div className="w-full text-center py-3 text-xs font-mono text-emerald-400 flex items-center justify-center gap-1.5">
+          <div className="w-full text-center py-3 text-xs font-mono text-emerald-600 dark:text-emerald-400 flex items-center justify-center gap-1.5">
             <HugeiconsIcon icon={SparklesIcon} size={14} />
             <span>All cards placed! Looks great.</span>
           </div>
@@ -268,19 +268,19 @@ export default function HeroTierSandbox() {
   }
 
   return (
-    <div className="w-full relative rounded-3xl p-3 sm:p-5 bg-zinc-950/85 border border-white/15 backdrop-blur-2xl shadow-2xl shadow-black/80 overflow-hidden text-left">
+    <div className="w-full relative rounded-3xl p-3 sm:p-5 bg-card/95 dark:bg-zinc-950/85 border border-border dark:border-white/15 backdrop-blur-2xl shadow-xl dark:shadow-2xl dark:shadow-black/80 overflow-hidden text-left">
       {/* Decorative Glow */}
       <div className="absolute -top-24 -right-24 w-72 h-72 bg-rose-500/15 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header Controls Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-border dark:border-white/10">
         <div className="flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-sm shadow-emerald-500/50" />
-          <span className="text-xs font-bold font-mono tracking-wider text-zinc-200 uppercase">
+          <span className="text-xs font-bold font-mono tracking-wider text-foreground uppercase">
             Try It Out Below
           </span>
-          <span className="hidden sm:inline-block text-[10px] font-mono px-2 py-0.5 rounded-md bg-white/5 text-zinc-400 border border-white/10">
+          <span className="hidden sm:inline-block text-[10px] font-mono px-2 py-0.5 rounded-md bg-secondary text-muted-foreground border border-border dark:border-white/10">
             Drag cards into tiers
           </span>
         </div>
@@ -288,7 +288,7 @@ export default function HeroTierSandbox() {
         {/* Action Controls */}
         <div className="flex items-center gap-2">
           {/* Card Size Selector */}
-          <div className="flex items-center bg-zinc-900/90 border border-white/10 rounded-xl p-0.5 text-[11px] font-mono">
+          <div className="flex items-center bg-secondary dark:bg-zinc-900/90 border border-border dark:border-white/10 rounded-xl p-0.5 text-[11px] font-mono">
             {(['compact', 'normal', 'large'] as const).map((s) => (
               <button
                 key={s}
@@ -296,8 +296,8 @@ export default function HeroTierSandbox() {
                 onClick={() => setSize(s)}
                 className={`px-2.5 py-1 rounded-lg capitalize transition-all cursor-pointer ${
                   size === s
-                    ? 'bg-white/20 text-white font-bold shadow-xs'
-                    : 'text-zinc-400 hover:text-zinc-200'
+                    ? 'bg-background text-foreground font-bold shadow-xs'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 {s[0].toUpperCase()}
@@ -310,7 +310,7 @@ export default function HeroTierSandbox() {
             type="button"
             onClick={handleShuffle}
             title="Randomize Items"
-            className="p-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 border border-white/10 text-zinc-300 hover:text-white transition-all active:scale-95 cursor-pointer flex items-center gap-1 text-xs px-2.5"
+            className="p-1.5 rounded-xl bg-secondary dark:bg-zinc-900/90 hover:bg-accent dark:hover:bg-zinc-800 border border-border dark:border-white/10 text-muted-foreground hover:text-foreground transition-all active:scale-95 cursor-pointer flex items-center gap-1 text-xs px-2.5"
           >
             <HugeiconsIcon icon={DicesIcon} size={14} />
             <span className="hidden sm:inline text-[11px] font-medium">Shuffle</span>
@@ -321,7 +321,7 @@ export default function HeroTierSandbox() {
             type="button"
             onClick={handleReset}
             title="Reset cards"
-            className="p-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 border border-white/10 text-zinc-300 hover:text-white transition-all active:scale-95 cursor-pointer"
+            className="p-1.5 rounded-xl bg-secondary dark:bg-zinc-900/90 hover:bg-accent dark:hover:bg-zinc-800 border border-border dark:border-white/10 text-muted-foreground hover:text-foreground transition-all active:scale-95 cursor-pointer"
           >
             <HugeiconsIcon icon={RefreshIcon} size={14} />
           </button>
@@ -367,8 +367,8 @@ export default function HeroTierSandbox() {
       </DragDropProvider>
 
       {/* Sandbox Footer CTA */}
-      <div className="mt-4 pt-3 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-2 text-zinc-400 font-mono text-[11px]">
+      <div className="mt-4 pt-3 border-t border-border dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-2 text-muted-foreground font-mono text-[11px]">
           <span className="inline-block w-1.5 h-1.5 rounded-full bg-rose-500" />
           <span>Includes custom tiers, image uploads, blind challenge & image export</span>
         </div>

@@ -33,21 +33,21 @@ export default function HeroSection() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Top Value Pill */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-white/15 text-xs font-mono text-zinc-300 shadow-md backdrop-blur-md mb-6 hover:border-rose-500/40 transition-all">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-card/90 dark:bg-zinc-900/90 border border-border dark:border-white/15 text-xs font-mono text-foreground shadow-sm dark:shadow-md backdrop-blur-md mb-6 hover:border-rose-500/40 transition-all">
           <span className="flex h-2 w-2 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500" />
           </span>
-          <span className="text-white font-semibold">100% Free</span>
-          <span className="text-zinc-500">•</span>
+          <span className="text-foreground font-semibold">100% Free</span>
+          <span className="text-muted-foreground">•</span>
           <span>Ad-Free Forever</span>
-          <span className="text-zinc-500">•</span>
-          <span className="text-amber-400 font-semibold">Zero Sign-Up Required</span>
+          <span className="text-muted-foreground">•</span>
+          <span className="text-amber-600 dark:text-amber-400 font-semibold">Zero Sign-Up Required</span>
         </div>
 
         {/* Main Headline */}
         <h1
-          className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-5xl mx-auto leading-[1.1] mb-6"
+          className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-foreground max-w-5xl mx-auto leading-[1.1] mb-6"
           style={{ fontFamily: 'var(--font-display)' }}
         >
           Rank Anything.{' '}
@@ -58,7 +58,7 @@ export default function HeroSection() {
         </h1>
 
         {/* Subtitle */}
-        <p className="text-base sm:text-xl text-zinc-300 max-w-3xl mx-auto font-normal leading-relaxed mb-8 sm:mb-10">
+        <p className="text-base sm:text-xl text-muted-foreground max-w-3xl mx-auto font-normal leading-relaxed mb-8 sm:mb-10">
           The modern tier list maker for creators, streamers, and friends. Enjoy effortless drag-and-drop, presentation mode for streaming, a live roulette spinner, and crystal-clear image downloads.
         </p>
 
@@ -77,7 +77,7 @@ export default function HeroSection() {
           <button
             type="button"
             onClick={scrollToTemplates}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-bold text-sm sm:text-base text-zinc-200 bg-zinc-900/80 hover:bg-zinc-800/90 border border-white/15 hover:border-white/30 backdrop-blur-md active:scale-95 transition-all cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl font-bold text-sm sm:text-base text-foreground bg-card/90 dark:bg-zinc-900/80 hover:bg-secondary dark:hover:bg-zinc-800/90 border border-border dark:border-white/15 hover:border-border/80 dark:hover:border-white/30 backdrop-blur-md active:scale-95 transition-all cursor-pointer shadow-sm"
           >
             <HugeiconsIcon icon={Layers01Icon} size={18} />
             <span>Explore Pre-made Templates</span>
@@ -89,9 +89,9 @@ export default function HeroSection() {
           {highlightBadges.map((badge) => (
             <div
               key={badge.label}
-              className="flex items-center justify-center gap-2 p-2.5 sm:p-3 rounded-xl bg-zinc-900/50 border border-white/10 text-zinc-300 text-xs sm:text-xs font-medium backdrop-blur-sm"
+              className="flex items-center justify-center gap-2 p-2.5 sm:p-3 rounded-xl bg-card/80 dark:bg-zinc-900/50 border border-border dark:border-white/10 text-foreground text-xs sm:text-xs font-medium backdrop-blur-sm shadow-xs"
             >
-              <HugeiconsIcon icon={badge.icon} size={16} className="text-rose-400 shrink-0" />
+              <HugeiconsIcon icon={badge.icon} size={16} className="text-rose-500 dark:text-rose-400 shrink-0" />
               <span className="truncate">{badge.label}</span>
             </div>
           ))}

@@ -48,8 +48,8 @@ export default function LandingNavbar() {
     <header
       className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         isScrolled
-          ? "bg-zinc-950/85 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-black/40"
-          : "bg-zinc-950/40 backdrop-blur-md border-b border-white/5"
+          ? "bg-background/90 dark:bg-zinc-950/85 backdrop-blur-xl border-b border-border/80 dark:border-white/10 shadow-lg shadow-black/5 dark:shadow-black/40"
+          : "bg-background/40 dark:bg-zinc-950/40 backdrop-blur-md border-b border-border/40 dark:border-white/5"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
@@ -58,7 +58,7 @@ export default function LandingNavbar() {
           to="/"
           className="flex items-center gap-3 cursor-pointer group select-none"
         >
-          <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden border border-white/20 bg-zinc-900 flex items-center justify-center shadow-md group-hover:scale-105 group-hover:border-rose-500/60 transition-all duration-300">
+          <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden border border-border dark:border-white/20 bg-card dark:bg-zinc-900 flex items-center justify-center shadow-md group-hover:scale-105 group-hover:border-rose-500/60 transition-all duration-300">
             <img
               src="/logo.png"
               alt="Live Tier List Maker"
@@ -68,28 +68,28 @@ export default function LandingNavbar() {
           </div>
           <div>
             <div className="flex items-center gap-1.5 leading-tight">
-              <span className="font-extrabold text-sm sm:text-base tracking-tight text-white group-hover:text-rose-400 transition-colors">
+              <span className="font-extrabold text-sm sm:text-base tracking-tight text-foreground group-hover:text-rose-500 transition-colors">
                 LIVE TIER LIST
               </span>
-              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-mono font-bold tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/30 shadow-xs">
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-mono font-bold tracking-wider bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 shadow-xs">
                 <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
                 STUDIO
               </span>
             </div>
-            <p className="text-[10px] text-zinc-400 font-mono tracking-tight hidden xs:block">
+            <p className="text-[10px] text-muted-foreground font-mono tracking-tight hidden xs:block">
               Real-Time Creator Suite
             </p>
           </div>
         </Link>
 
         {/* Desktop Nav Links */}
-        <nav className="hidden md:flex items-center gap-1 bg-zinc-900/60 border border-white/10 rounded-full px-3 py-1.5 backdrop-blur-md">
+        <nav className="hidden md:flex items-center gap-1 bg-secondary/80 dark:bg-zinc-900/60 border border-border/80 dark:border-white/10 rounded-full px-3 py-1.5 backdrop-blur-md">
           {navLinks.map((link) => (
             <button
               key={link.label}
               type="button"
               onClick={() => handleNavClick(link.href)}
-              className="px-3.5 py-1 text-xs font-medium text-zinc-300 hover:text-white hover:bg-white/10 rounded-full transition-all cursor-pointer"
+              className="px-3.5 py-1 text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-background/80 dark:hover:bg-white/10 rounded-full transition-all cursor-pointer"
             >
               {link.label}
             </button>
@@ -103,14 +103,14 @@ export default function LandingNavbar() {
             href={EXTERNAL_LINKS.GITHUB_REPO}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-white/10 text-zinc-300 hover:text-white text-xs font-mono transition-all active:scale-95 shadow-xs"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-secondary dark:bg-zinc-900/80 hover:bg-accent dark:hover:bg-zinc-800 border border-border/80 dark:border-white/10 text-muted-foreground hover:text-foreground text-xs font-mono transition-all active:scale-95 shadow-xs"
           >
             <HugeiconsIcon
               icon={StarIcon}
               size={14}
-              className="text-amber-400 fill-amber-400"
+              className="text-amber-500 fill-amber-500 dark:text-amber-400 dark:fill-amber-400"
             />
-            <span className="font-semibold">Star on GitHub</span>
+            <span className="font-semibold text-foreground">Star on GitHub</span>
           </a>
 
           {/* Theme Toggle */}
@@ -118,11 +118,12 @@ export default function LandingNavbar() {
             type="button"
             onClick={toggleTheme}
             title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
-            className="p-2 rounded-xl bg-zinc-900/80 hover:bg-zinc-800 border border-white/10 text-zinc-300 hover:text-white transition-all active:scale-95 cursor-pointer"
+            className="p-2 rounded-xl bg-secondary dark:bg-zinc-900/80 hover:bg-accent dark:hover:bg-zinc-800 border border-border/80 dark:border-white/10 text-foreground transition-all active:scale-95 cursor-pointer"
           >
             <HugeiconsIcon
               icon={theme === "dark" ? Sun01Icon : Moon02Icon}
               size={16}
+              className={theme === "dark" ? "text-amber-400" : "text-slate-800"}
             />
           </button>
 
@@ -146,7 +147,7 @@ export default function LandingNavbar() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-xl bg-zinc-900 border border-white/10 text-zinc-300 hover:text-white"
+            className="md:hidden p-2 rounded-xl bg-secondary dark:bg-zinc-900 border border-border dark:border-white/10 text-foreground"
           >
             <HugeiconsIcon
               icon={mobileMenuOpen ? Cancel01Icon : Menu01Icon}
@@ -158,21 +159,21 @@ export default function LandingNavbar() {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-white/10 bg-zinc-950/95 backdrop-blur-2xl px-5 py-4 space-y-3 animate-in slide-in-from-top-4 duration-200">
+        <div className="md:hidden border-b border-border dark:border-white/10 bg-background/95 dark:bg-zinc-950/95 backdrop-blur-2xl px-5 py-4 space-y-3 animate-in slide-in-from-top-4 duration-200">
           <div className="grid grid-cols-2 gap-2">
             {navLinks.map((link) => (
               <button
                 key={link.label}
                 type="button"
                 onClick={() => handleNavClick(link.href)}
-                className="px-3 py-2 text-left text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/10 rounded-lg transition-all"
+                className="px-3 py-2 text-left text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg transition-all"
               >
                 {link.label}
               </button>
             ))}
           </div>
 
-          <div className="pt-2 border-t border-white/10 flex items-center justify-between">
+          <div className="pt-2 border-t border-border dark:border-white/10 flex items-center justify-between">
             <Link
               to="/templates/$templateId"
               params={{ templateId: "games" }}
