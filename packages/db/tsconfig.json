@@ -1,7 +1,10 @@
 {
   "extends": "@tier/tsconfig/base.json",
   "compilerOptions": {
-    "moduleResolution": "bundler"
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true,
+    "declarationMap": true
   },
   "include": ["src/**/*"]
 }
