@@ -1,17 +1,95 @@
-# Live Tier List Maker 🏆
+# Live Tier List Maker (Monorepo) 🏆
 
-A modern, responsive, and fully customizable **Live Tier List Maker** built with React 19, TypeScript, Vite, Tailwind CSS v4, Zustand, Shadcn UI, and Hugeicons.
+A high-performance, full-stack **Live Collaborative Tier List Maker** built as a modern TypeScript monorepo using **Turborepo**, **pnpm**, **NestJS**, **Vite + React**, **PostgreSQL + Prisma**, and **Tailwind CSS**.
+
+---
+
+## 🏗️ Monorepo Architecture
+
+```
+tier-list-maker-live/
+├── apps/
+│   ├── web/                    # Frontend (React 19, Vite, Tailwind CSS v4, Zustand, Shadcn UI)
+│   └── api/                    # Backend API (NestJS, Swagger, Prisma Service, REST & WS)
+├── packages/
+│   ├── db/                     # Internal Prisma ORM layer & PostgreSQL schemas (Backend-only)
+│   ├── types/                  # Shared Domain Types & DTO contracts (Web & API)
+│   ├── eslint-config/          # Shared ESLint configuration rules (Base, React, Nest)
+│   └── tsconfig/               # Shared TypeScript base & project configs
+├── pnpm-workspace.yaml
+├── turbo.json
+└── package.json
+```
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js >= 20
+- pnpm >= 9 or 10
+- PostgreSQL database (optional for local mock mode, required for full DB persistence)
+
+### 1. Install Dependencies
+
+```bash
+pnpm install
+```
+
+### 2. Generate Prisma Client
+
+```bash
+pnpm db:generate
+```
+
+### 3. Start Development Mode
+
+To run both the Vite frontend and NestJS backend concurrently:
+
+```bash
+pnpm dev
+```
+
+- **Web App**: `http://localhost:5173`
+- **Backend API**: `http://localhost:3000/api`
+- **Swagger Documentation**: `http://localhost:3000/api/docs`
+
+### Individual App Development
+
+```bash
+pnpm dev:web    # Start only the Vite React frontend
+pnpm dev:api    # Start only the NestJS backend API
+```
+
+---
+
+## 🛠️ Workspace Commands
+
+| Command            | Description                                             |
+| :----------------- | :------------------------------------------------------ |
+| `pnpm dev`         | Run all applications in dev mode with hot reload        |
+| `pnpm build`       | Build all packages and applications via Turborepo       |
+| `pnpm lint`        | Run ESLint across all apps and packages                 |
+| `pnpm typecheck`   | Run TypeScript typechecking across the entire workspace |
+| `pnpm format`      | Format the entire codebase with Prettier                |
+| `pnpm db:generate` | Generate Prisma Client in `@tier/db`                    |
+| `pnpm db:push`     | Push schema changes directly to the PostgreSQL database |
+| `pnpm db:migrate`  | Create and apply Prisma migrations                      |
+| `pnpm db:studio`   | Open Prisma Studio database viewer                      |
 
 ---
 
 ## ✨ Key Features
 
 ### 🎯 Interactive Drag & Drop Board
+
 - **Fluid Drag and Drop**: Powered by `@dnd-kit/react` and `@dnd-kit/helpers` with reordering, active drag shadows, and responsive touch/click fallback.
 - **Card Size Options**: Switch between **Compact (S)**, **Normal (M)**, and **Large (L)** card sizes on the fly.
 - **Quick Action Menu**: Click any item card to quickly assign it to any tier, send it back to the unassigned pool, edit its title/category, or delete it.
 
 ### 🧩 Shadcn UI & Ergonomic Edit UX
+
 - **Shadcn Component Architecture**: Built using `@base-ui/react` primitives styled with Tailwind CSS tokens:
   - `Tooltip` & `TooltipProvider`: Portal-based tooltips with collision avoidance (no container cutoff).
   - `Dialog`: Accessible modals for Add Item, Export, Edit Metadata, Roulette, and Templates.
@@ -21,19 +99,23 @@ A modern, responsive, and fully customizable **Live Tier List Maker** built with
 - **Tier Settings Popover**: Instant tier renaming, 16 curated color presets, custom color hex picker, and reordering controls.
 
 ### 🎨 Dark & Light Mode
+
 - Seamless theme toggle with **Dark Mode** (obsidian glassmorphism) and **Light Mode** (crisp frosted glass).
 - Persistent theme preference saved in `localStorage`.
 
 ### 👁️ Presentation & Preview Mode
+
 - 1-Click **Preview Mode** that hides all editor buttons for clean live streams, screen shares, and recording.
 - Includes a helpful top banner to exit preview mode at any time.
 
 ### 📊 Real-Time Ranking Statistics
+
 - Intuitive progress indicators:
   - **Ranked**: Displays how many total items are ranked with a percentage badge (`Ranked: 6/12 (50%)`).
   - **In Pool**: Tracks items remaining in the unassigned pool.
 
 ### 🎮 Pre-Loaded Rich Templates
+
 1. 🎮 **Top Video Games** (Elden Ring, Zelda: Tears of the Kingdom, Baldur's Gate 3, GTA V, Witcher 3, Cyberpunk 2077, Minecraft, etc.)
 2. ⚽ **Football / Soccer Legends** (Messi, Ronaldo, Pelé, Maradona, Zidane, Ronaldinho, Haaland, Mbappé, etc.)
 3. 💻 **Tech Stack & Languages** (TypeScript, Rust, Python, Go, React, Next.js, Docker, Tailwind CSS, etc.)
@@ -42,13 +124,16 @@ A modern, responsive, and fully customizable **Live Tier List Maker** built with
 6. ✨ **Blank Custom Template** (Start from scratch)
 
 ### 🎲 Streamer Roulette
+
 - Spin the animated roulette wheel to randomly select and rank unassigned items live on stream.
 
 ### ➕ Custom Item Creator & Bulk Import
+
 - **Single Item**: Add items with custom names, categories, and image URLs or local file uploads (with base64 preview).
 - **Bulk Import**: Paste a list of names (one per line) to instantly generate unassigned items.
 
 ### 📸 High-Resolution PNG Export & JSON Backup
+
 - **2x High-Res PNG Download**: Generates crisp, downloadable images complete with custom titles, author tags, and tier colors.
 - **Copy Image to Clipboard**: Directly paste your tier list into Twitter, Discord, Reddit, or Slack.
 - **JSON Configuration Export & Import**: Backup and share your custom tier lists with friends.
@@ -57,13 +142,13 @@ A modern, responsive, and fully customizable **Live Tier List Maker** built with
 
 ## ⌨️ Keyboard Shortcuts
 
-| Shortcut | Action |
-| --- | --- |
-| `⌘ / Ctrl + Z` | Undo previous action |
-| `⌘ / Ctrl + Y` or `⌘ / Ctrl + Shift + Z` | Redo action |
-| `⌘ / Ctrl + E` | Open Export Modal (PNG / Clipboard / JSON) |
-| `N` | Open Add Custom Item Modal |
-| `R` | Open Streamer Roulette |
+| Shortcut                                 | Action                                     |
+| ---------------------------------------- | ------------------------------------------ |
+| `⌘ / Ctrl + Z`                           | Undo previous action                       |
+| `⌘ / Ctrl + Y` or `⌘ / Ctrl + Shift + Z` | Redo action                                |
+| `⌘ / Ctrl + E`                           | Open Export Modal (PNG / Clipboard / JSON) |
+| `N`                                      | Open Add Custom Item Modal                 |
+| `R`                                      | Open Streamer Roulette                     |
 
 ---
 
@@ -84,17 +169,21 @@ A modern, responsive, and fully customizable **Live Tier List Maker** built with
 ## 🚀 Getting Started
 
 ### 1. Install Dependencies
+
 ```bash
 pnpm install
 ```
 
 ### 2. Run Development Server
+
 ```bash
 pnpm dev
 ```
+
 Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ### 3. Build for Production
+
 ```bash
 pnpm build
 ```

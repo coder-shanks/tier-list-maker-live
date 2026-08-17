@@ -1,0 +1,9 @@
+{
+  "extends": "@tier/tsconfig/base.json",
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": true,
+    "moduleResolution": "bundler"
+  },
+  "include": ["vite.config.ts"]
+}

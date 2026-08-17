@@ -1,0 +1,102 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  username  String     @unique
+  password  String?
+  avatarUrl String?
+  tierLists TierList[]
+  rooms     Room[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("users")
+}
+
+model Template {
+  id           String     @id @default(cuid())
+  title        String
+  description  String?
+  coverImage   String?
+  category     String     @default("Gaming")
+  usageCount   Int        @default(0)
+  defaultRows  Json       // Array of { name: string, color: string }
+  defaultItems Json       // Array of { label: string, imageUrl: string }
+  tierLists    TierList[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("templates")
+}
+
+model TierList {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  coverImage  String?
+  category    String?
+  isPublic    Boolean    @default(true)
+  authorId    String?
+  author      User?      @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  templateId  String?
+  template    Template?  @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  rows        TierRow[]
+  items       TierItem[]
+  rooms       Room[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@map("tier_lists")
+}
+
+model TierRow {
+  id         String     @id @default(cuid())
+  name       String
+  color      String
+  order      Int        @default(0)
+  tierListId String
+  tierList   TierList   @relation(fields: [tierListId], references: [id], onDelete: Cascade)
+  items      TierItem[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@map("tier_rows")
+}
+
+model TierItem {
+  id         String    @id @default(cuid())
+  label      String
+  imageUrl   String
+  order      Int       @default(0)
+  rowId      String?
+  row        TierRow?  @relation(fields: [rowId], references: [id], onDelete: SetNull)
+  tierListId String
+  tierList   TierList  @relation(fields: [tierListId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@map("tier_items")
+}
+
+model Room {
+  id         String    @id @default(cuid())
+  code       String    @unique
+  name       String
+  tierListId String
+  tierList   TierList  @relation(fields: [tierListId], references: [id], onDelete: Cascade)
+  hostId     String?
+  host       User?     @relation(fields: [hostId], references: [id], onDelete: SetNull)
+  isActive   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@map("rooms")
+}

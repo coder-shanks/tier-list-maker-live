@@ -49,25 +49,25 @@ graph TD
 - Add `BlindChallengeConfig`:
   ```typescript
   export type BlindChallengeConfig = {
-    mode: "standard" | "hardcore";
-    tierCaps: Record<string, number>;
-    resetBoardFirst: boolean;
-  };
+    mode: 'standard' | 'hardcore'
+    tierCaps: Record<string, number>
+    resetBoardFirst: boolean
+  }
   ```
 - Add `BlindModeState`:
   ```typescript
   export type BlindModeState = {
-    isActive: boolean;
-    mode: "standard" | "hardcore";
-    queue: string[];
-    currentItemId: string | null;
-    lockedItemIds: string[];
-    tierCaps: Record<string, number>;
-    history: BlindChallengeHistoryEntry[];
-    startedAt: number | null;
-    completedAt: number | null;
-    totalItems: number;
-  };
+    isActive: boolean
+    mode: 'standard' | 'hardcore'
+    queue: string[]
+    currentItemId: string | null
+    lockedItemIds: string[]
+    tierCaps: Record<string, number>
+    history: BlindChallengeHistoryEntry[]
+    startedAt: number | null
+    completedAt: number | null
+    totalItems: number
+  }
   ```
 
 ---
