@@ -1,30 +1,39 @@
-import type { TierItem, TierList, TierRow, Template } from './models'
+import type { TemplateData, Tier, TierItem, TierList, TierListContainers } from './models'
 
 export interface CreateTierListDto {
   title: string
+  subtitle?: string
   description?: string
   category?: string
   isPublic?: boolean
-  rows: Array<{ name: string; color: string; order: number }>
-  items: Array<{ label: string; imageUrl: string }>
+  author?: string
+  tiers: Tier[]
+  items: TierItem[]
+  containers: TierListContainers
 }
 
 export interface UpdateTierListDto {
   title?: string
+  subtitle?: string
   description?: string
   category?: string
   isPublic?: boolean
-  rows?: TierRow[]
-  unrankedItems?: TierItem[]
+  tiers?: Tier[]
+  items?: TierItem[]
+  containers?: TierListContainers
 }
 
 export interface CreateTemplateDto {
-  title: string
-  description?: string
+  name: string
+  description: string
+  icon: string
   category: string
-  coverImage?: string
-  defaultRows: Array<{ name: string; color: string }>
-  defaultItems: Array<{ label: string; imageUrl: string }>
+  title: string
+  subtitle: string
+  author: string
+  tiers: Tier[]
+  items: TierItem[]
+  containers: TierListContainers
 }
 
 export interface ApiResponse<T> {
@@ -39,4 +48,11 @@ export interface PaginatedResponse<T> {
   page: number
   pageSize: number
   totalPages: number
+}
+
+export interface AppStatsDto {
+  totalTemplates: number
+  totalRankedLists: number
+  activeStreamers: number
+  communityCreations: number
 }

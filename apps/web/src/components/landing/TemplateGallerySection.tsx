@@ -1,24 +1,37 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Layers01Icon, ArrowRight01Icon, SparklesIcon } from '@hugeicons/core-free-icons'
-import { TEMPLATES } from '../../lib/constants'
+import { useTemplatesStore } from '../../store/useTemplatesStore'
 import { Link } from '@tanstack/react-router'
 
 export default function TemplateGallerySection() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
 
+  const templates = useTemplatesStore((s) => s.templates)
+  const categoriesList = useTemplatesStore((s) => s.categories)
+  const fetchTemplates = useTemplatesStore((s) => s.fetchTemplates)
+  const fetchCategories = useTemplatesStore((s) => s.fetchCategories)
+
+  useEffect(() => {
+    fetchTemplates()
+    fetchCategories()
+  }, [fetchTemplates, fetchCategories])
+
   const categories = useMemo(() => {
+    if (categoriesList && categoriesList.length > 0) {
+      return categoriesList.map((c) => c.name)
+    }
     const cats = new Set<string>()
-    TEMPLATES.forEach((t) => {
+    templates.forEach((t) => {
       if (t.category) cats.add(t.category)
     })
     return Array.from(cats)
-  }, [])
+  }, [categoriesList, templates])
 
   const filteredTemplates = useMemo(() => {
-    if (!activeCategory) return TEMPLATES
-    return TEMPLATES.filter((t) => t.category === activeCategory)
-  }, [activeCategory])
+    if (!activeCategory) return templates
+    return templates.filter((t) => t.category.toLowerCase() === activeCategory.toLowerCase())
+  }, [templates, activeCategory])
 
   return (
     <section
@@ -56,7 +69,7 @@ export default function TemplateGallerySection() {
                   : 'bg-card dark:bg-zinc-900/80 text-muted-foreground hover:text-foreground border border-border dark:border-white/10'
               }`}
             >
-              All ({TEMPLATES.length})
+              All ({templates.length})
             </button>
             {categories.map((cat) => (
               <button

@@ -5,45 +5,63 @@ export interface UserProfile {
   createdAt: string
 }
 
-export interface TierItem {
+export interface Tier {
   id: string
-  label: string
-  imageUrl: string
-  rowId?: string | null
-  order: number
+  title: string
+  color: string
+  textColor?: string
 }
 
-export interface TierRow {
+export type TierRow = Tier
+
+
+export interface TierItem {
+  id: string
+  title: string
+  imageUrl?: string
+  category?: string
+  subtitle?: string
+  color?: string
+}
+
+export type TierListContainers = Record<string, string[]>
+
+export interface TemplateData {
   id: string
   name: string
-  color: string
-  order: number
+  description: string
+  icon: string
+  category: string
+  title: string
+  subtitle: string
+  author: string
+  tiers: Tier[]
   items: TierItem[]
+  containers: TierListContainers
+  usageCount?: number
+  createdAt?: string
 }
 
 export interface TierList {
   id: string
   title: string
+  subtitle?: string | null
   description?: string | null
   coverImage?: string | null
   category?: string | null
   isPublic: boolean
   authorId?: string | null
-  author?: UserProfile | null
-  rows: TierRow[]
-  unrankedItems: TierItem[]
+  author?: UserProfile | string | null
+  tiers: Tier[]
+  items: TierItem[]
+  containers: TierListContainers
   createdAt: string
   updatedAt: string
 }
 
-export interface Template {
+export interface TemplateCategory {
   id: string
-  title: string
-  description?: string | null
-  coverImage?: string | null
-  category: string
-  usageCount: number
-  defaultRows: Array<{ name: string; color: string }>
-  defaultItems: Array<{ label: string; imageUrl: string }>
-  createdAt: string
+  name: string
+  icon: string
+  count: number
 }

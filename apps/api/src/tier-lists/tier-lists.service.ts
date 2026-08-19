@@ -4,159 +4,163 @@ import type { CreateTierListDto, UpdateTierListDto, TierList } from '@tier/types
 
 @Injectable()
 export class TierListsService {
+  private memoryTierLists: Map<string, TierList> = new Map()
+
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll(): Promise<TierList[]> {
     try {
-      const lists = await this.prisma.tierList.findMany({
-        where: { isPublic: true },
-        include: {
-          rows: { include: { items: true }, orderBy: { order: 'asc' } },
-          items: { where: { rowId: null }, orderBy: { order: 'asc' } },
-          author: {
-            select: { id: true, username: true, avatarUrl: true, createdAt: true },
+      if (this.prisma.isConnected) {
+        const lists = await this.prisma.tierList.findMany({
+          where: { isPublic: true },
+          include: {
+            rows: { include: { items: true }, orderBy: { order: 'asc' } },
+            items: { where: { rowId: null }, orderBy: { order: 'asc' } },
           },
-        },
-        orderBy: { createdAt: 'desc' },
-      })
+          orderBy: { createdAt: 'desc' },
+        })
 
-      return lists.map((l) => ({
-        id: l.id,
-        title: l.title,
-        description: l.description,
-        coverImage: l.coverImage,
-        category: l.category,
-        isPublic: l.isPublic,
-        authorId: l.authorId,
-        author: l.author
-          ? { ...l.author, createdAt: l.author.createdAt.toISOString() }
-          : null,
-        rows: l.rows.map((r) => ({
-          id: r.id,
-          name: r.name,
-          color: r.color,
-          order: r.order,
-          items: r.items.map((i) => ({
-            id: i.id,
-            label: i.label,
-            imageUrl: i.imageUrl,
-            rowId: i.rowId,
-            order: i.order,
-          })),
-        })),
-        unrankedItems: l.items.map((i) => ({
-          id: i.id,
-          label: i.label,
-          imageUrl: i.imageUrl,
-          rowId: i.rowId,
-          order: i.order,
-        })),
-        createdAt: l.createdAt.toISOString(),
-        updatedAt: l.updatedAt.toISOString(),
-      }))
+        if (lists && lists.length > 0) {
+          return lists.map((l) => ({
+            id: l.id,
+            title: l.title,
+            subtitle: l.description || '',
+            description: l.description,
+            coverImage: l.coverImage,
+            category: l.category,
+            isPublic: l.isPublic,
+            authorId: l.authorId,
+            author: 'Creator',
+            tiers: l.rows.map((r) => ({
+              id: r.id,
+              title: r.name,
+              color: r.color,
+            })),
+            items: l.items.map((i) => ({
+              id: i.id,
+              title: i.label,
+              imageUrl: i.imageUrl,
+            })),
+            containers: {
+              ...Object.fromEntries(l.rows.map((r) => [r.id, r.items.map((i) => i.id)])),
+              POOL: l.items.map((i) => i.id),
+            },
+            createdAt: l.createdAt.toISOString(),
+            updatedAt: l.updatedAt.toISOString(),
+          }))
+        }
+      }
     } catch {
-      return []
+      // Fallback to memory
     }
+
+    return Array.from(this.memoryTierLists.values())
   }
 
   async findOne(id: string): Promise<TierList> {
     try {
-      const l = await this.prisma.tierList.findUnique({
-        where: { id },
-        include: {
-          rows: { include: { items: true }, orderBy: { order: 'asc' } },
-          items: { where: { rowId: null }, orderBy: { order: 'asc' } },
-          author: {
-            select: { id: true, username: true, avatarUrl: true, createdAt: true },
+      if (this.prisma.isConnected) {
+        const l = await this.prisma.tierList.findUnique({
+          where: { id },
+          include: {
+            rows: { include: { items: true }, orderBy: { order: 'asc' } },
+            items: { where: { rowId: null }, orderBy: { order: 'asc' } },
           },
-        },
-      })
+        })
 
-      if (!l) {
-        throw new NotFoundException(`Tier list #${id} not found`)
+        if (l) {
+          return {
+            id: l.id,
+            title: l.title,
+            subtitle: l.description || '',
+            description: l.description,
+            coverImage: l.coverImage,
+            category: l.category,
+            isPublic: l.isPublic,
+            authorId: l.authorId,
+            author: 'Creator',
+            tiers: l.rows.map((r) => ({
+              id: r.id,
+              title: r.name,
+              color: r.color,
+            })),
+            items: l.items.map((i) => ({
+              id: i.id,
+              title: i.label,
+              imageUrl: i.imageUrl,
+            })),
+            containers: {
+              ...Object.fromEntries(l.rows.map((r) => [r.id, r.items.map((i) => i.id)])),
+              POOL: l.items.map((i) => i.id),
+            },
+            createdAt: l.createdAt.toISOString(),
+            updatedAt: l.updatedAt.toISOString(),
+          }
+        }
       }
+    } catch {
+      // Fallback
+    }
 
-      return {
-        id: l.id,
-        title: l.title,
-        description: l.description,
-        coverImage: l.coverImage,
-        category: l.category,
-        isPublic: l.isPublic,
-        authorId: l.authorId,
-        author: l.author
-          ? { ...l.author, createdAt: l.author.createdAt.toISOString() }
-          : null,
-        rows: l.rows.map((r) => ({
-          id: r.id,
-          name: r.name,
-          color: r.color,
-          order: r.order,
-          items: r.items.map((i) => ({
-            id: i.id,
-            label: i.label,
-            imageUrl: i.imageUrl,
-            rowId: i.rowId,
-            order: i.order,
-          })),
-        })),
-        unrankedItems: l.items.map((i) => ({
-          id: i.id,
-          label: i.label,
-          imageUrl: i.imageUrl,
-          rowId: i.rowId,
-          order: i.order,
-        })),
-        createdAt: l.createdAt.toISOString(),
-        updatedAt: l.updatedAt.toISOString(),
-      }
-    } catch (e) {
-      if (e instanceof NotFoundException) throw e
+    const item = this.memoryTierLists.get(id)
+    if (!item) {
       throw new NotFoundException(`Tier list #${id} not found`)
     }
+    return item
   }
 
   async create(dto: CreateTierListDto): Promise<TierList> {
-    const list = await this.prisma.tierList.create({
-      data: {
-        title: dto.title,
-        description: dto.description,
-        category: dto.category,
-        isPublic: dto.isPublic ?? true,
-        rows: {
-          create: dto.rows.map((r) => ({
-            name: r.name,
-            color: r.color,
-            order: r.order,
-          })),
-        },
-        items: {
-          create: dto.items.map((it, idx) => ({
-            label: it.label,
-            imageUrl: it.imageUrl,
-            order: idx,
-          })),
-        },
-      },
-      include: {
-        rows: { include: { items: true } },
-        items: true,
-      },
-    })
+    const id = `list-${Date.now()}`
+    const newList: TierList = {
+      id,
+      title: dto.title,
+      subtitle: dto.subtitle || '',
+      description: dto.description || '',
+      category: dto.category || 'Custom',
+      isPublic: dto.isPublic ?? true,
+      author: dto.author || 'Live Streamer',
+      tiers: dto.tiers,
+      items: dto.items,
+      containers: dto.containers,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
 
-    return this.findOne(list.id)
+    try {
+      if (this.prisma.isConnected) {
+        await this.prisma.tierList.create({
+          data: {
+            title: dto.title,
+            description: dto.subtitle || dto.description,
+            category: dto.category,
+            isPublic: dto.isPublic ?? true,
+          },
+        })
+      }
+    } catch {
+      // DB offline fallback
+    }
+
+    this.memoryTierLists.set(id, newList)
+    return newList
   }
 
   async update(id: string, dto: UpdateTierListDto): Promise<TierList> {
-    await this.prisma.tierList.update({
-      where: { id },
-      data: {
-        title: dto.title,
-        description: dto.description,
-        category: dto.category,
-        isPublic: dto.isPublic,
-      },
-    })
-    return this.findOne(id)
+    const existing = await this.findOne(id)
+    const updated: TierList = {
+      ...existing,
+      title: dto.title ?? existing.title,
+      subtitle: dto.subtitle ?? existing.subtitle,
+      description: dto.description ?? existing.description,
+      category: dto.category ?? existing.category,
+      isPublic: dto.isPublic ?? existing.isPublic,
+      tiers: dto.tiers ?? existing.tiers,
+      items: dto.items ?? existing.items,
+      containers: dto.containers ?? existing.containers,
+      updatedAt: new Date().toISOString(),
+    }
+
+    this.memoryTierLists.set(id, updated)
+    return updated
   }
 }

@@ -1,86 +1,6 @@
-import type { ColorPreset, Tier, TemplateData } from './types'
+import type { TemplateData } from '@tier/types'
 
-export const EXTERNAL_LINKS = {
-  GITHUB_REPO: 'https://github.com/coder-shanks/tier-list-maker-live',
-}
-
-export const COLOR_PRESETS: ColorPreset[] = [
-  { id: 'crimson', name: 'Ruby S', bg: '#e11d48', text: '#ffffff', border: '#be123c' },
-  { id: 'ember', name: 'Flame A', bg: '#ea580c', text: '#ffffff', border: '#c2410c' },
-  { id: 'gold', name: 'Solar B', bg: '#d97706', text: '#000000', border: '#b45309' },
-  { id: 'mint', name: 'Cyber Mint C', bg: '#059669', text: '#ffffff', border: '#047857' },
-  {
-    id: 'cerulean',
-    name: 'Sky Cerulean D',
-    bg: '#0284c7',
-    text: '#ffffff',
-    border: '#0369a1',
-  },
-  {
-    id: 'violet',
-    name: 'Royal Violet F',
-    bg: '#7c3aed',
-    text: '#ffffff',
-    border: '#6d28d9',
-  },
-  { id: 'slate', name: 'Steel Slate', bg: '#475569', text: '#ffffff', border: '#334155' },
-  { id: 'rose', name: 'Neon Rose', bg: '#f43f5e', text: '#ffffff', border: '#e11d48' },
-  { id: 'amber', name: 'Pure Amber', bg: '#f59e0b', text: '#000000', border: '#d97706' },
-  {
-    id: 'emerald',
-    name: 'Emerald Green',
-    bg: '#10b981',
-    text: '#ffffff',
-    border: '#059669',
-  },
-  { id: 'cyan', name: 'Cyan Glow', bg: '#06b6d4', text: '#ffffff', border: '#0891b2' },
-  {
-    id: 'indigo',
-    name: 'Deep Indigo',
-    bg: '#4f46e5',
-    text: '#ffffff',
-    border: '#4338ca',
-  },
-  {
-    id: 'purple',
-    name: 'Electric Purple',
-    bg: '#9333ea',
-    text: '#ffffff',
-    border: '#7e22ce',
-  },
-  {
-    id: 'fuchsia',
-    name: 'Hot Fuchsia',
-    bg: '#c026d3',
-    text: '#ffffff',
-    border: '#a21caf',
-  },
-  {
-    id: 'zinc',
-    name: 'Obsidian Black',
-    bg: '#18181b',
-    text: '#ffffff',
-    border: '#27272a',
-  },
-  {
-    id: 'neutral',
-    name: 'Architect White',
-    bg: '#e2e8f0',
-    text: '#0f172a',
-    border: '#cbd5e1',
-  },
-]
-
-export const DEFAULT_TIERS: Tier[] = [
-  { id: 'tier-s', title: 'S', color: '#e11d48', textColor: '#ffffff' },
-  { id: 'tier-a', title: 'A', color: '#ea580c', textColor: '#ffffff' },
-  { id: 'tier-b', title: 'B', color: '#d97706', textColor: '#000000' },
-  { id: 'tier-c', title: 'C', color: '#059669', textColor: '#ffffff' },
-  { id: 'tier-d', title: 'D', color: '#0284c7', textColor: '#ffffff' },
-  { id: 'tier-f', title: 'F', color: '#7c3aed', textColor: '#ffffff' },
-]
-
-export const TEMPLATES: TemplateData[] = [
+export const DEFAULT_TEMPLATES: TemplateData[] = [
   {
     id: 'games',
     name: 'Top Video Games',
@@ -90,6 +10,7 @@ export const TEMPLATES: TemplateData[] = [
     title: 'All-Time Greatest Video Games Tier List',
     subtitle: 'Ranked live based on gameplay, story, innovation, and replayability',
     author: 'Live Streamer',
+    usageCount: 1420,
     tiers: [
       { id: 'tier-s', title: 'GOAT (Masterpiece)', color: '#ef4444', textColor: '#ffffff' },
       { id: 'tier-a', title: 'Must Play (Elite)', color: '#f97316', textColor: '#ffffff' },
@@ -217,6 +138,7 @@ export const TEMPLATES: TemplateData[] = [
     title: 'Top Anime & Manga Series Tier List',
     subtitle: 'Ranked on story arcs, animation quality, world-building, and character growth',
     author: 'Anime Otaku',
+    usageCount: 2180,
     tiers: [
       { id: 'tier-s', title: 'S - God Tier / Masterpiece', color: '#ef4444', textColor: '#ffffff' },
       { id: 'tier-a', title: 'A - Peak Anime / Must Watch', color: '#f97316', textColor: '#ffffff' },
@@ -330,6 +252,7 @@ export const TEMPLATES: TemplateData[] = [
     title: 'Greatest Superheroes Tier List',
     subtitle: 'Ranked on powers, comic legacy, villains, lore, and impact',
     author: 'Comic Fan',
+    usageCount: 940,
     tiers: [
       { id: 'tier-s', title: 'S - Apex Legends', color: '#ef4444', textColor: '#ffffff' },
       { id: 'tier-a', title: 'A - Top Tier Heroes', color: '#f97316', textColor: '#ffffff' },
@@ -427,6 +350,7 @@ export const TEMPLATES: TemplateData[] = [
     title: 'Football GOATs Tier List',
     subtitle: 'Ranked on individual skill, trophies, longevity, and historic moments',
     author: 'Live Streamer',
+    usageCount: 3120,
     tiers: [
       { id: 'tier-s', title: 'The GOATs (S-Tier)', color: '#ef4444', textColor: '#ffffff' },
       { id: 'tier-a', title: 'All-Time Legends', color: '#f97316', textColor: '#ffffff' },
@@ -496,6 +420,7 @@ export const TEMPLATES: TemplateData[] = [
     title: 'Developer Tech Stack Tier List',
     subtitle: 'Ranked by developer experience, performance, ecosystem, and joy',
     author: 'Tech Creator',
+    usageCount: 1890,
     tiers: [
       { id: 'tier-s', title: 'S - God Tier / Daily Driver', color: '#ef4444', textColor: '#ffffff' },
       { id: 'tier-a', title: 'A - S Tier Potential / Love It', color: '#f97316', textColor: '#ffffff' },
@@ -586,6 +511,7 @@ export const TEMPLATES: TemplateData[] = [
     title: 'Greatest Movies of All Time Tier List',
     subtitle: 'Ranked by storytelling, cinematography, acting, and rewatchability',
     author: 'Film Buff',
+    usageCount: 1650,
     tiers: [
       { id: 'tier-s', title: 'S - Cinema Perfection', color: '#ef4444', textColor: '#ffffff' },
       { id: 'tier-a', title: 'A - Absolute Classic', color: '#f97316', textColor: '#ffffff' },
@@ -641,6 +567,7 @@ export const TEMPLATES: TemplateData[] = [
     title: 'Ultimate Food & Street Cuisine Tier List',
     subtitle: 'Ranked purely by flavor, craving factor, and deliciousness',
     author: 'Foodie Live',
+    usageCount: 2450,
     tiers: [
       { id: 'tier-s', title: 'S - Heavenly (Can eat daily)', color: '#ef4444', textColor: '#ffffff' },
       { id: 'tier-a', title: 'A - Top Tier Delicious', color: '#f97316', textColor: '#ffffff' },
@@ -696,7 +623,15 @@ export const TEMPLATES: TemplateData[] = [
     title: 'My Custom Tier List',
     subtitle: 'Create, customize, and rank anything you want',
     author: 'Live Streamer',
-    tiers: DEFAULT_TIERS,
+    usageCount: 540,
+    tiers: [
+      { id: 'tier-s', title: 'S', color: '#e11d48', textColor: '#ffffff' },
+      { id: 'tier-a', title: 'A', color: '#ea580c', textColor: '#ffffff' },
+      { id: 'tier-b', title: 'B', color: '#d97706', textColor: '#000000' },
+      { id: 'tier-c', title: 'C', color: '#059669', textColor: '#ffffff' },
+      { id: 'tier-d', title: 'D', color: '#0284c7', textColor: '#ffffff' },
+      { id: 'tier-f', title: 'F', color: '#7c3aed', textColor: '#ffffff' },
+    ],
     items: [],
     containers: {
       'tier-s': [],
@@ -709,4 +644,3 @@ export const TEMPLATES: TemplateData[] = [
     },
   },
 ]
-

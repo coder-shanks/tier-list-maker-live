@@ -18,6 +18,7 @@ import { Link } from '@tanstack/react-router'
 import { SimpleTooltip } from './ui/tooltip'
 import { Button } from './ui/button'
 import ConfirmModal from './ConfirmModal'
+import { useTemplatesStore } from '../store/useTemplatesStore'
 
 export default function Navbar() {
   const selectedTemplateId = useMetadataStore((s) => s.selectedTemplateId)
@@ -39,8 +40,12 @@ export default function Navbar() {
   const tiers = useTierDataStore((s) => s.tiers)
   const containers = useTierDataStore((s) => s.containers)
 
+  const templates = useTemplatesStore((s) => s.templates)
   const currentTemplate =
-    TEMPLATES.find((t) => t.id === selectedTemplateId) || TEMPLATES[0]
+    templates.find((t) => t.id === selectedTemplateId) ||
+    TEMPLATES.find((t) => t.id === selectedTemplateId) ||
+    templates[0] ||
+    TEMPLATES[0]
 
   const togglePreview = () => {
     setPreviewMode(!previewMode)

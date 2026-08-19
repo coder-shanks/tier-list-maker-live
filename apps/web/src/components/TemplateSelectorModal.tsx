@@ -1,8 +1,8 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useUiStore } from '../store/useUiStore'
 import { useMetadataStore } from '../store/useMetadataStore'
 import { useTierDataStore } from '../store/useTierDataStore'
-import { TEMPLATES } from '../lib/constants'
+import { useTemplatesStore } from '../store/useTemplatesStore'
 import { HugeiconsIcon } from '@hugeicons/react'
 import {
   Layers01Icon,
@@ -29,29 +29,45 @@ export default function TemplateSelectorModal() {
   const selectedTemplateId = useMetadataStore((s) => s.selectedTemplateId)
   const loadTemplate = useTierDataStore((s) => s.loadTemplate)
 
+  const templates = useTemplatesStore((s) => s.templates)
+  const categoriesList = useTemplatesStore((s) => s.categories)
+  const fetchTemplates = useTemplatesStore((s) => s.fetchTemplates)
+  const fetchCategories = useTemplatesStore((s) => s.fetchCategories)
+  const isLoading = useTemplatesStore((s) => s.isLoading)
+
   const [search, setSearch] = useState('')
   const [selectedCat, setSelectedCat] = useState<string | null>(null)
 
+  useEffect(() => {
+    if (isTemplateOpen) {
+      fetchTemplates()
+      fetchCategories()
+    }
+  }, [isTemplateOpen, fetchTemplates, fetchCategories])
+
   // Extract categories
   const categories = useMemo(() => {
+    if (categoriesList && categoriesList.length > 0) {
+      return categoriesList.map((c) => c.name)
+    }
     const cats = new Set<string>()
-    TEMPLATES.forEach((t) => {
+    templates.forEach((t) => {
       if (t.category) cats.add(t.category)
     })
     return Array.from(cats)
-  }, [])
+  }, [categoriesList, templates])
 
   // Filter templates
   const filteredTemplates = useMemo(() => {
-    return TEMPLATES.filter((t) => {
+    return templates.filter((t) => {
       const matchSearch =
         t.name.toLowerCase().includes(search.toLowerCase()) ||
         t.description.toLowerCase().includes(search.toLowerCase()) ||
         t.category.toLowerCase().includes(search.toLowerCase())
-      const matchCat = !selectedCat || t.category === selectedCat
+      const matchCat = !selectedCat || t.category.toLowerCase() === selectedCat.toLowerCase()
       return matchSearch && matchCat
     })
-  }, [search, selectedCat])
+  }, [templates, search, selectedCat])
 
   const handleSelect = (templateId: string) => {
     loadTemplate(templateId)
@@ -75,7 +91,7 @@ export default function TemplateSelectorModal() {
                 Curated Tier List Templates
               </DialogTitle>
               <DialogDescription className="text-xs">
-                Select from {TEMPLATES.length} pre-built collections across gaming,
+                Select from {templates.length} pre-built collections across gaming,
                 cinema, tech, anime, and pop culture.
               </DialogDescription>
             </div>
@@ -107,7 +123,7 @@ export default function TemplateSelectorModal() {
                   : 'bg-secondary text-muted-foreground hover:text-foreground border border-border'
               }`}
             >
-              All ({TEMPLATES.length})
+              All ({templates.length})
             </button>
             {categories.map((cat) => (
               <button

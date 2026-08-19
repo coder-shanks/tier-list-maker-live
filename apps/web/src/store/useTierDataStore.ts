@@ -10,6 +10,7 @@ import type {
 } from '../lib/types'
 import { useMetadataStore } from './useMetadataStore'
 import { useHistoryStore } from './useHistoryStore'
+import { useTemplatesStore } from './useTemplatesStore'
 
 export interface TierDataState {
   tiers: Tier[]
@@ -17,7 +18,7 @@ export interface TierDataState {
   containers: TierListContainers
 
   // Actions - Templates
-  loadTemplate: (templateId: string) => void
+  loadTemplate: (templateId: string, customTemplate?: TemplateData) => void
   resetCurrentTemplate: () => void
 
   // Actions - Tiers
@@ -146,9 +147,23 @@ export const useTierDataStore = create<TierDataState>()(
       items: defaultTemplate.items,
       containers: defaultTemplate.containers,
 
-      loadTemplate: (templateId) => {
+      loadTemplate: (templateId, customTemplate) => {
         recordHistory()
-        const template = TEMPLATES.find((t) => t.id === templateId) || TEMPLATES[0]
+        let template =
+          customTemplate ||
+          useTemplatesStore.getState().templates.find((t) => t.id === templateId) ||
+          TEMPLATES.find((t) => t.id === templateId)
+
+        if (!template) {
+          // Attempt async fetch in background if not yet loaded
+          useTemplatesStore.getState().getTemplateById(templateId).then((fetched) => {
+            if (fetched) {
+              get().loadTemplate(templateId, fetched)
+            }
+          })
+          template = TEMPLATES[0]
+        }
+
         useMetadataStore.setState({
           selectedTemplateId: template.id,
           title: template.title,

@@ -8,11 +8,18 @@ import type { CreateTemplateDto } from '@tier/types'
 export class TemplatesController {
   constructor(private readonly templatesService: TemplatesService) {}
 
+  @Get('categories')
+  @ApiOperation({ summary: 'Get all template categories and counts' })
+  getCategories() {
+    return this.templatesService.getCategories()
+  }
+
   @Get()
   @ApiOperation({ summary: 'Get all community and official tier list templates' })
   @ApiQuery({ name: 'category', required: false, type: String })
-  findAll(@Query('category') category?: string) {
-    return this.templatesService.findAll(category)
+  @ApiQuery({ name: 'search', required: false, type: String })
+  findAll(@Query('category') category?: string, @Query('search') search?: string) {
+    return this.templatesService.findAll(category, search)
   }
 
   @Get(':id')
